@@ -3,23 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Aesthetic Pro v7</title>
+    <title>Aesthetic Pro v8</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { -webkit-tap-highlight-color: transparent; font-family: -apple-system, system-ui, sans-serif; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        input[type="number"] { -webkit-appearance: none; margin: 0; }
+        input[type="number"] { -webkit-appearance: none; margin: 0; border: none; outline: none; }
         .tab-active { background: #4f46e5; color: white; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); }
+        .diet-card { transition: all 0.2s ease; }
+        .diet-card:active { transform: scale(0.98); }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900">
-    <div id="app">
-        </div>
+    <div id="app"></div>
 
     <script>
-        // --- DATA INITIALIZATION ---
+        // --- DATA ---
         const defaultData = {
             routine: 'A',
             tab: 'workout',
@@ -56,37 +57,51 @@
             },
             weights: {},
             diet: [
-                { t: "Colazione", v: [{ d: "Avena + Albume + Uovo", k: 510, p: 32 }, { d: "Yogurt Greco + Granola", k: 480, p: 30 }, { d: "Bresaola + Avocado", k: 520, p: 35 }]},
-                { t: "Pranzo", v: [{ d: "Riso + Pollo + Olio", k: 680, p: 40 }, { d: "Pasta + Manzo Magro", k: 710, p: 38 }, { d: "Quinoa + Tonno + Olio", k: 650, p: 39 }]},
-                { t: "Spuntino", v: [{ d: "Barretta + Mela", k: 280, p: 20 }, { d: "Parmigiano + Pera", k: 250, p: 12 }, { d: "Skyr + Mandorle", k: 270, p: 22 }]},
-                { t: "Cena", v: [{ d: "Salmone + Patate", k: 650, p: 35 }, { d: "Orata + CousCous", k: 610, p: 42 }, { d: "Tacchino + Pane", k: 590, p: 38 }]}
+                { t: "Colazione", v: [
+                    { d: "80g Avena + 150g Albume + 1 Uovo intero + 50g Mirtilli", k: 515, p: 32 },
+                    { d: "250g Yogurt Greco (2%) + 50g Granola + 20g Noci", k: 490, p: 30 },
+                    { d: "80g Pane integrale + 100g Bresaola + 50g Avocado", k: 510, p: 35 }
+                ]},
+                { t: "Pranzo", v: [
+                    { d: "100g Riso Basmati + 150g Pollo + 200g Zucchine + 15g Olio EVO", k: 690, p: 40 },
+                    { d: "100g Pasta integrale + 150g Manzo magro + Salsa pomodoro + 10g Olio EVO", k: 720, p: 38 },
+                    { d: "100g Quinoa + 150g Tonno (nat.) + 200g Verdure mix + 15g Olio EVO", k: 660, p: 39 }
+                ]},
+                { t: "Spuntino", v: [
+                    { d: "1 Barretta Proteica (60g) + 1 Mela (150g)", k: 285, p: 20 },
+                    { d: "40g Parmigiano Reggiano + 1 Pera (150g)", k: 260, p: 13 },
+                    { d: "170g Skyr Bianco + 20g Mandorle", k: 275, p: 22 }
+                ]},
+                { t: "Cena", v: [
+                    { d: "150g Salmone + 250g Patate (bollite/forno) + 200g Asparagi + 5g Olio EVO", k: 650, p: 36 },
+                    { d: "200g Orata/Branzino + 80g Couscous + 200g Broccoli + 15g Olio EVO", k: 620, p: 42 },
+                    { d: "150g Tacchino + 80g Pane integrale + Insalata mista + 15g Olio EVO", k: 600, p: 38 }
+                ]}
             ]
         };
 
-        let state = JSON.parse(localStorage.getItem('aesthetic_v7')) || defaultData;
+        let state = JSON.parse(localStorage.getItem('aesthetic_v8')) || defaultData;
 
         function save() {
-            localStorage.setItem('aesthetic_v7', JSON.stringify(state));
+            localStorage.setItem('aesthetic_v8', JSON.stringify(state));
             render();
         }
 
-        // --- ICONS ---
         const iconGym = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5 3 10l3.5 3.5m11-7L21 10l-3.5 3.5"/><path d="m18 7-11 10"/><path d="m14 7 3.5 3.5-3.5 3.5"/><path d="m6.5 6.5 3.5 3.5-3.5 3.5"/></svg>`;
         const iconFood = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>`;
-        const iconEdit = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2l-.2.8a1 1 0 0 1-1.2.7l-.8-.2a2 2 0 0 0-2.5 1.1l-.2.4a2 2 0 0 0 1.1 2.5l.8.2a1 1 0 0 1 .7 1.2l-.2.8a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2l.2-.8a1 1 0 0 1 1.2-.7l.8.2a2 2 0 0 0 2.5-1.1l.2-.4a2 2 0 0 0-1.1-2.5l-.8-.2a1 1 0 0 1-.7-1.2l.2-.8a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>`;
+        const iconEdit = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`;
 
-        // --- RENDER ENGINE ---
         function render() {
             const app = document.getElementById('app');
             const r = state.workout[state.routine];
 
-            let content = `
-                <header class="bg-indigo-700 p-6 text-white rounded-b-[2rem] shadow-xl sticky top-0 z-50 flex justify-between items-center">
+            let html = `
+                <header class="bg-indigo-700 p-6 text-white rounded-b-[2.5rem] shadow-xl sticky top-0 z-50 flex justify-between items-center">
                     <div>
-                        <h1 class="text-2xl font-black italic tracking-tighter uppercase leading-none">Aesthetic v7</h1>
-                        <p class="text-[9px] font-bold opacity-60 uppercase tracking-widest mt-1">V-Shape Protocol • 60kg</p>
+                        <h1 class="text-2xl font-black italic tracking-tighter uppercase leading-none">Aesthetic v8</h1>
+                        <p class="text-[9px] font-bold opacity-70 uppercase tracking-widest mt-1 italic">V-Shape • Clean Bulk</p>
                     </div>
-                    <button onclick="state.isEdit = !state.isEdit; save()" class="p-3 rounded-full ${state.isEdit ? 'bg-amber-400 shadow-lg rotate-90' : 'bg-white/10'} transition-all">
+                    <button onclick="state.isEdit = !state.isEdit; save()" class="p-3 rounded-full ${state.isEdit ? 'bg-amber-400 rotate-90' : 'bg-white/10'} transition-all shadow-lg">
                         ${iconEdit}
                     </button>
                 </header>
@@ -94,20 +109,20 @@
             `;
 
             if (state.tab === 'workout') {
-                content += `
-                    <div class="flex bg-white p-1 rounded-2xl shadow-inner border">
+                html += `
+                    <div class="flex bg-white p-1 rounded-2xl shadow-inner border border-slate-200">
                         <button onclick="state.routine='A'; save()" class="flex-1 py-3 rounded-xl font-bold text-xs ${state.routine === 'A' ? 'tab-active' : 'text-slate-400'}">ROUTINE A</button>
                         <button onclick="state.routine='B'; save()" class="flex-1 py-3 rounded-xl font-bold text-xs ${state.routine === 'B' ? 'tab-active' : 'text-slate-400'}">ROUTINE B</button>
                     </div>
 
                     <div class="bg-amber-50 border border-amber-100 p-4 rounded-2xl">
-                        <p class="text-[9px] font-black text-amber-600 uppercase mb-1 tracking-widest">Warmup</p>
-                        ${state.isEdit ? `<input onchange="state.workout['${state.routine}'].warmup=this.value; save()" class="w-full text-xs p-2 rounded" value="${r.warmup}">` : `<p class="text-xs font-bold text-amber-900 leading-tight">${r.warmup}</p>`}
+                        <p class="text-[9px] font-black text-amber-600 uppercase mb-1 tracking-widest"> Warmup & Mobility</p>
+                        ${state.isEdit ? `<input onchange="state.workout['${state.routine}'].warmup=this.value; save()" class="w-full text-xs p-2 rounded border" value="${r.warmup}">` : `<p class="text-xs font-bold text-amber-900 leading-tight">${r.warmup}</p>`}
                     </div>
 
                     <div class="space-y-4">
                         ${r.exs.map(ex => `
-                            <div class="bg-white p-5 rounded-[2rem] border border-slate-100 shadow-sm transition-all active:scale-[0.98]">
+                            <div class="bg-white p-5 rounded-[2rem] border border-slate-100 shadow-sm transition-all active:scale-[0.97]">
                                 <div class="flex justify-between items-start gap-3">
                                     <div class="flex-1">
                                         ${state.isEdit ? `
@@ -125,32 +140,42 @@
                                                value="${state.weights[ex.id] || ''}" placeholder="KG">
                                     ` : ''}
                                 </div>
-                                ${!state.isEdit ? `<p class="mt-3 text-[10px] text-slate-400 font-bold uppercase italic leading-tight border-t pt-2">${ex.t}</p>` : ''}
+                                ${!state.isEdit ? `<div class="mt-3 text-[10px] text-slate-400 font-bold uppercase italic leading-tight border-t border-slate-50 pt-2 flex items-center gap-2">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-indigo-300"></span> ${ex.t}
+                                </div>` : ''}
                             </div>
                         `).join('')}
                     </div>
 
-                    <div class="bg-indigo-50 border border-indigo-100 p-5 rounded-[2rem]">
-                        <p class="text-[9px] font-black text-indigo-600 uppercase mb-2 tracking-widest text-center italic">Addome V-Shape</p>
-                        ${state.isEdit ? `<input onchange="state.workout['${state.routine}'].abs=this.value; save()" class="w-full text-xs p-2 rounded" value="${r.abs}">` : `<p class="text-sm font-black text-indigo-900 text-center">${r.abs}</p>`}
+                    <div class="bg-indigo-600 p-5 rounded-[2.5rem] shadow-lg">
+                        <p class="text-[9px] font-black text-white/60 uppercase mb-2 tracking-widest text-center italic">Addominali V-Line</p>
+                        ${state.isEdit ? `<input onchange="state.workout['${state.routine}'].abs=this.value; save()" class="w-full text-xs p-2 rounded" value="${r.abs}">` : `<p class="text-sm font-black text-white text-center">${r.abs}</p>`}
                     </div>
                 `;
             } else {
-                content += `
-                    <div class="bg-emerald-600 p-8 rounded-[3rem] text-white shadow-lg">
-                        <p class="text-[10px] font-black opacity-70 tracking-[0.2em] mb-1 uppercase italic font-bold">Daily Fuel Target</p>
-                        <h2 class="text-3xl font-black italic tracking-tighter uppercase">2400 Kcal / 125g P</h2>
+                html += `
+                    <div class="bg-emerald-600 p-8 rounded-[3rem] text-white shadow-xl flex flex-col items-center text-center">
+                        <p class="text-[10px] font-black opacity-70 tracking-[0.2em] mb-1 uppercase font-bold italic">Nutrizione Strategica</p>
+                        <h2 class="text-3xl font-black italic tracking-tighter uppercase">2400 Kcal</h2>
+                        <div class="flex gap-4 mt-3">
+                            <span class="text-[10px] font-black bg-white/20 px-3 py-1 rounded-full uppercase tracking-widest">Pro: 125g</span>
+                            <span class="text-[10px] font-black bg-white/20 px-3 py-1 rounded-full uppercase tracking-widest">Fat: 65g</span>
+                        </div>
                     </div>
                     ${state.diet.map(m => `
                         <div class="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm">
-                            <h4 class="text-[10px] font-black text-slate-300 uppercase tracking-widest mb-4 border-b pb-2">${m.t}</h4>
-                            <div class="space-y-3">
-                                ${m.v.map(v => `
-                                    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                                        <p class="text-xs font-bold text-slate-700 leading-snug mb-2">${v.d}</p>
-                                        <div class="flex gap-2">
-                                            <span class="text-[9px] font-black bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-md">${v.k} KCAL</span>
-                                            <span class="text-[9px] font-black bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-md">P: ${v.p}G</span>
+                            <div class="flex items-center gap-2 mb-4 border-b border-slate-50 pb-2">
+                                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                                <h4 class="text-[10px] font-black text-slate-300 uppercase tracking-widest">${m.t}</h4>
+                            </div>
+                            <div class="space-y-4">
+                                ${m.v.map((v, idx) => `
+                                    <div class="diet-card p-4 bg-slate-50 rounded-3xl border border-slate-100 relative overflow-hidden">
+                                        <div class="absolute top-0 left-0 w-1 h-full bg-emerald-200"></div>
+                                        <p class="text-xs font-bold text-slate-700 leading-snug mb-3 pl-1">${v.d}</p>
+                                        <div class="flex gap-2 pl-1">
+                                            <span class="text-[9px] font-black bg-emerald-100 text-emerald-700 px-2 py-1 rounded-lg uppercase tracking-tighter">${v.k} KCAL</span>
+                                            <span class="text-[9px] font-black bg-indigo-100 text-indigo-700 px-2 py-1 rounded-lg uppercase tracking-tighter">P: ${v.p}G</span>
                                         </div>
                                     </div>
                                 `).join('')}
@@ -160,19 +185,19 @@
                 `;
             }
 
-            content += `
+            html += `
                 </main>
-                <nav class="fixed bottom-6 left-6 right-6 bg-white border border-slate-200 h-20 rounded-[2.5rem] shadow-2xl flex justify-around items-center px-4 z-[100]">
-                    <button onclick="state.tab='workout'; save()" class="flex-1 flex flex-col items-center ${state.tab === 'workout' ? 'text-indigo-600' : 'text-slate-300'}">
+                <nav class="fixed bottom-6 left-6 right-6 bg-white/95 backdrop-blur-md border border-slate-200 h-20 rounded-[2.5rem] shadow-2xl flex justify-around items-center px-4 z-[100]">
+                    <button onclick="state.tab='workout'; save()" class="flex-1 flex flex-col items-center transition-all ${state.tab === 'workout' ? 'text-indigo-600 scale-110' : 'text-slate-300'}">
                         ${iconGym} <span class="text-[8px] font-black uppercase mt-1">Power</span>
                     </button>
-                    <button onclick="state.tab='diet'; save()" class="flex-1 flex flex-col items-center ${state.tab === 'diet' ? 'text-emerald-600' : 'text-slate-300'}">
+                    <button onclick="state.tab='diet'; save()" class="flex-1 flex flex-col items-center transition-all ${state.tab === 'diet' ? 'text-emerald-600 scale-110' : 'text-slate-300'}">
                         ${iconFood} <span class="text-[8px] font-black uppercase mt-1">Fuel</span>
                     </button>
                 </nav>
             `;
 
-            app.innerHTML = content;
+            app.innerHTML = html;
         }
 
         window.editEx = (id, field, val) => {
@@ -181,7 +206,6 @@
             save();
         };
 
-        // Start
         render();
     </script>
 </body>
