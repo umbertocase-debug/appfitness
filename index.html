@@ -3,165 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Aesthetic Gym App v4</title>
+    <title>Aesthetic Gym</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { -webkit-tap-highlight-color: transparent; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
 </head>
-<body class="bg-slate-50 text-slate-900 antialiased">
+<body class="bg-slate-50">
     <div id="root"></div>
 
     <script type="text/babel">
         const { useState, useEffect } = React;
 
-        const Icon = ({ name, size = 20, className = "" }) => {
-            useEffect(() => { if (window.lucide) window.lucide.createIcons(); }, [name]);
-            return <i data-lucide={name} style={{width: size, height: size}} className={className}></i>;
+        // Icone SVG integrate per evitare crash esterni
+        const Icons = {
+            Dumbbell: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6.5 6.5 3 10l3.5 3.5m11-7L21 10l-3.5 3.5"/><path d="m18 7-11 10"/><path d="m3 10 18 0"/><path d="m14 7 3.5 3.5-3.5 3.5"/><path d="m6.5 6.5 3.5 3.5-3.5 3.5"/></svg>,
+            Utensils: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>,
+            Chart: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
         };
 
         const App = () => {
-            const [activeTab, setActiveTab] = useState('workout');
-            const [activeRoutine, setActiveRoutine] = useState('A');
-            const [history, setHistory] = useState(() => {
-                try {
-                    const saved = localStorage.getItem('gymProgress_v4');
-                    return saved ? JSON.parse(saved) : {};
-                } catch (e) { return {}; }
+            const [tab, setTab] = useState('workout');
+            const [routine, setRoutine] = useState('A');
+            const [data, setData] = useState(() => {
+                const saved = localStorage.getItem('gym_v5');
+                return saved ? JSON.parse(saved) : {};
             });
 
-            useEffect(() => {
-                localStorage.setItem('gymProgress_v4', JSON.stringify(history));
-                if (window.lucide) window.lucide.createIcons();
-            }, [history, activeTab, activeRoutine]);
+            useEffect(() => { localStorage.setItem('gym_v5', JSON.stringify(data)); }, [data]);
 
-            const routines = {
+            const workout = {
                 A: {
-                    title: "Routine A: Massa & Spessore",
-                    warmup: "7 min Tapis Roulant (Pendenza 5%) + Mobilità Spalle",
-                    exercises: [
-                        { id: 'lento', name: 'Lento Avanti Manubri', sets: '3x8-10', tip: 'Spalle: scendi fin sotto le orecchie.' },
-                        { id: 'lat', name: 'Lat Machine Presa Larga', sets: '3x10', tip: 'Tira con i gomiti, non con le mani.' },
-                        { id: 'panca', name: 'Panca Piana Manubri', sets: '3x10', tip: 'Strizza il petto in fase di risalita.' },
-                        { id: 'ss1_b', name: 'SS: Curl EZ (Bicipiti)', sets: '4x10', tip: 'Parte 1 del superset: esplosivo.' },
-                        { id: 'ss1_t', name: 'SS: French Press (Tricipiti)', sets: '4x10', tip: 'Parte 2: tieni i gomiti stretti.' },
-                        { id: 'alz_lat', name: 'Alzate Laterali', sets: '3x15', tip: 'Mignolo verso l alto.' },
-                        { id: 'facepull', name: 'Facepull ai Cavi', sets: '3x12', tip: 'Porta la corda verso la fronte, apri i gomiti.' }
+                    name: "Routine A: Massa/Spessore",
+                    warmup: "7' Tapis Roulant (Pendenza 5%) + Mobilità Spalle",
+                    exs: [
+                        { id: 'a1', n: 'Lento Avanti Manubri', s: '3x8-10', t: 'Spalle: scendi fin sotto le orecchie.' },
+                        { id: 'a2', n: 'Lat Machine Pr. Larga', s: '3x10', t: 'Tira con i gomiti, non con le mani.' },
+                        { id: 'a3', n: 'Panca Piana Manubri', s: '3x10', t: 'Strizza il petto in risalita.' },
+                        { id: 'a4', n: 'SS: Curl EZ (Bicipiti)', s: '4x10', t: 'Parte 1 del superset.' },
+                        { id: 'a5', n: 'SS: French Press (Tric.)', s: '4x10', t: 'Parte 2: gomiti stretti.' },
+                        { id: 'a6', n: 'Alzate Laterali', s: '3x15', t: 'Mignolo verso l alto.' },
+                        { id: 'a7', n: 'Facepull ai Cavi', s: '3x12', t: 'Spalle 3D: tira verso la fronte.' }
                     ],
-                    abs: [
-                        { id: 'leg_raise', name: 'Leg Raises', sets: '3x15', tip: 'Focus V-line bassa.' },
-                        { id: 'plank', name: 'Plank', sets: '3x60s', tip: 'Core solido, pancia in dentro.' }
-                    ]
+                    abs: "Leg Raises 3x15 + Plank 3x60s"
                 },
                 B: {
-                    title: "Routine B: Ampiezza & V-Shape",
-                    warmup: "7 min Tapis Roulant + Circonduzioni braccia",
-                    exercises: [
-                        { id: 'traz', name: 'Trazioni o Lat Stretta', sets: '3xMax/10', tip: 'Fondamentale per la V-Shape.' },
-                        { id: 'inc', name: 'Panca Inclinata Manubri', sets: '3x10', tip: 'Focus sulla parte alta del petto.' },
-                        { id: 'alz_cavi', name: 'Alzate Laterali ai Cavi', sets: '3x12', tip: 'Tensione costante per spalle a palla.' },
-                        { id: 'ss2_h', name: 'SS: Hammer Curl (Bicipiti)', sets: '4x12', tip: 'Presa a martello per spessore braccio.' },
-                        { id: 'ss2_p', name: 'SS: Pushdown Corda (Tricipiti)', sets: '4x12', tip: 'Spremi in fondo aprendo la corda.' },
-                        { id: 'curl45', name: 'Curl Panca Inclinata 45°', sets: '2x12', tip: 'Massimo stretch del bicipite.' },
-                        { id: 'dips', name: 'Dips (Panche o Parallele)', sets: '3xMax', tip: 'Distruggi i tricipiti per volume totale.' }
+                    name: "Routine B: Ampiezza/V-Shape",
+                    warmup: "7' Tapis Roulant + Circonduzioni braccia",
+                    exs: [
+                        { id: 'b1', n: 'Trazioni o Lat Stretta', s: '3xMax/10', t: 'Fondamentale per la V.' },
+                        { id: 'b2', n: 'Panca Inclinata Man.', s: '3x10', t: 'Focus petto alto.' },
+                        { id: 'b3', n: 'Alzate Laterali Cavi', s: '3x12', t: 'Tensione costante.' },
+                        { id: 'b4', n: 'SS: Hammer Curl (Bic.)', s: '4x12', t: 'Spessore del braccio.' },
+                        { id: 'b5', n: 'SS: Pushdown Corda (Tri.)', s: '4x12', t: 'Spremi in fondo aprendo la corda.' },
+                        { id: 'b6', n: 'Curl Panca Inc. 45°', s: '2x12', t: 'Massimo stretch bicipite.' },
+                        { id: 'b7', n: 'Dips (Panche/Parall.)', s: '3xMax', t: 'Volume totale braccia.' }
                     ],
-                    abs: [
-                        { id: 'wood', name: 'Woodchopper ai Cavi', sets: '3x15 per lato', tip: 'Scolpisce gli obliqui laterali.' },
-                        { id: 'bicycle', name: 'Bicycle Crunch', sets: '3x20', tip: 'Definizione addome totale.' }
-                    ]
+                    abs: "Woodchopper 3x15 + Bicycle Crunch 3x20"
                 }
             };
 
-            const nutrition = [
-                { time: "Colazione", options: ["80g Avena + 150g Albume + 1 uovo", "250g Yogurt Greco 2% + 50g Granola", "Pane tostato + 100g Bresaola + Avocado"] },
-                { time: "Pranzo", options: ["100g Riso + 150g Pollo + Olio", "100g Pasta + 150g Macinato Magro", "100g Quinoa + 150g Tonno + Olio"] },
-                { time: "Spuntino", options: ["1 Barretta Proteica + 1 Mela", "30g Parmigiano + 1 Pera", "150g Skyr + Mandorle"] },
-                { time: "Cena", options: ["150g Salmone + 200g Patate", "200g Orata + 80g CousCous", "150g Tacchino + 60g Pane + Verdura"] }
+            const diet = [
+                { t: "Colazione", o: ["80g Avena + 150g Albume", "250g Yogurt Greco + Granola", "Pane + Bresaola + Avocado"] },
+                { t: "Pranzo", o: ["100g Riso + 150g Pollo + Olio", "100g Pasta + 150g Manzo", "100g Quinoa + 150g Tonno"] },
+                { t: "Spuntino", o: ["Barretta Proteica + Mela", "30g Parmigiano + Pera", "150g Skyr + Mandorle"] },
+                { t: "Cena", o: ["150g Salmone + 200g Patate", "200g Orata + 80g CousCous", "150g Tacchino + Pane + Verdura"] }
             ];
 
             return (
-                <div className="min-h-screen pb-28 bg-slate-50">
-                    <header className="bg-indigo-700 p-6 text-white shadow-lg rounded-b-[2rem] sticky top-0 z-50">
-                        <div className="flex justify-between items-center">
-                            <h1 className="text-xl font-black tracking-tighter uppercase italic">Aesthetic v4</h1>
-                            <div className="bg-white/20 px-3 py-1 rounded-full text-[10px] font-bold">31y | 60kg</div>
-                        </div>
+                <div className="max-w-md mx-auto min-h-screen flex flex-col pb-24">
+                    <header className="bg-indigo-700 p-6 text-white rounded-b-3xl shadow-lg">
+                        <h1 className="text-2xl font-black italic tracking-tighter">AESTHETIC V5</h1>
+                        <p className="text-[10px] font-bold opacity-70 uppercase tracking-widest">31y | 60kg | Goal: 64kg</p>
                     </header>
 
-                    <main className="p-4 max-w-md mx-auto space-y-6">
-                        {activeTab === 'workout' && (
-                            <>
+                    <main className="p-4 flex-1 overflow-y-auto no-scrollbar">
+                        {tab === 'workout' && (
+                            <div className="space-y-6">
                                 <div className="flex bg-white p-1 rounded-2xl shadow-sm border">
-                                    <button onClick={() => setActiveRoutine('A')} className={`flex-1 py-3 rounded-xl font-bold transition-all ${activeRoutine === 'A' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400'}`}>Routine A</button>
-                                    <button onClick={() => setActiveRoutine('B')} className={`flex-1 py-3 rounded-xl font-bold transition-all ${activeRoutine === 'B' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400'}`}>Routine B</button>
+                                    <button onClick={() => setRoutine('A')} className={`flex-1 py-3 rounded-xl font-bold text-sm ${routine === 'A' ? 'bg-indigo-600 text-white' : 'text-slate-400'}`}>Routine A</button>
+                                    <button onClick={() => setRoutine('B')} className={`flex-1 py-3 rounded-xl font-bold text-sm ${routine === 'B' ? 'bg-indigo-600 text-white' : 'text-slate-400'}`}>Routine B</button>
                                 </div>
 
-                                <div className="bg-amber-50 border border-amber-100 p-4 rounded-2xl flex items-center gap-3">
-                                    <Icon name="flame" className="text-amber-500" />
-                                    <div>
-                                        <p className="text-[10px] font-black uppercase text-amber-600 tracking-widest">Riscaldamento</p>
-                                        <p className="text-xs font-bold text-amber-900 leading-tight">{routines[activeRoutine].warmup}</p>
-                                    </div>
+                                <div className="bg-amber-100/50 border border-amber-200 p-4 rounded-2xl">
+                                    <p className="text-[10px] font-black text-amber-600 uppercase">Warmup</p>
+                                    <p className="text-xs font-bold text-amber-800">{workout[routine].warmup}</p>
                                 </div>
 
-                                <div className="space-y-4">
-                                    <p className="text-[10px] font-black uppercase text-slate-400 tracking-[0.2em] px-2">Esercizi Principali (7)</p>
-                                    {routines[activeRoutine].exercises.map((ex) => (
-                                        <div key={ex.id} className="bg-white p-4 rounded-3xl shadow-sm border border-slate-100">
-                                            <div className="flex justify-between items-start mb-2">
+                                <div className="space-y-3">
+                                    {workout[routine].exs.map(ex => (
+                                        <div key={ex.id} className="bg-white p-4 rounded-3xl border border-slate-100 shadow-sm">
+                                            <div className="flex justify-between items-center mb-2">
                                                 <div>
-                                                    <h3 className="font-black text-slate-800 uppercase text-sm leading-tight">{ex.name}</h3>
-                                                    <span className="text-indigo-600 text-[10px] font-black">{ex.sets}</span>
+                                                    <h4 className="font-black text-slate-800 text-sm uppercase leading-tight">{ex.n}</h4>
+                                                    <p className="text-indigo-600 text-[10px] font-bold">{ex.s}</p>
                                                 </div>
                                                 <input 
-                                                    type="number" 
-                                                    placeholder="KG"
-                                                    className="w-14 bg-slate-100 border-none rounded-xl p-2 text-center font-black text-indigo-600 text-sm outline-none"
-                                                    value={history[ex.id] || ''}
-                                                    onChange={(e) => setHistory({...history, [ex.id]: e.target.value})}
+                                                    type="number" placeholder="KG"
+                                                    className="w-14 h-10 bg-slate-100 rounded-xl text-center font-bold text-indigo-600 outline-none"
+                                                    value={data[ex.id] || ''}
+                                                    onChange={e => setData({...data, [ex.id]: e.target.value})}
                                                 />
                                             </div>
-                                            <div className="flex items-start gap-2 text-[10px] text-slate-500 font-bold uppercase leading-tight italic">
-                                                <Icon name="info" size={10} className="text-indigo-300 mt-0.5" />
-                                                {ex.tip}
-                                            </div>
+                                            <p className="text-[9px] text-slate-400 font-bold uppercase italic leading-tight">{ex.t}</p>
                                         </div>
                                     ))}
                                 </div>
 
-                                <div className="space-y-4 pt-4">
-                                    <p className="text-[10px] font-black uppercase text-indigo-400 tracking-[0.2em] px-2">Addominali V-Shape</p>
-                                    {routines[activeRoutine].abs.map((ab) => (
-                                        <div key={ab.id} className="bg-indigo-50/50 p-4 rounded-3xl border border-indigo-100 flex justify-between items-center">
-                                            <div>
-                                                <h4 className="font-black text-indigo-900 text-xs uppercase">{ab.name}</h4>
-                                                <p className="text-[9px] font-bold text-indigo-500 uppercase">{ab.sets} • {ab.tip}</p>
-                                            </div>
-                                            <Icon name="check-circle" className="text-indigo-200" />
-                                        </div>
-                                    ))}
+                                <div className="bg-indigo-50 border border-indigo-100 p-5 rounded-3xl">
+                                    <p className="text-[10px] font-black text-indigo-600 uppercase mb-1">Addome V-Shape</p>
+                                    <p className="text-sm font-black text-indigo-900 italic">{workout[routine].abs}</p>
                                 </div>
-                            </>
+                            </div>
                         )}
 
-                        {activeTab === 'nutrition' && (
-                            <div className="space-y-4 animate-in fade-in">
-                                <div className="bg-emerald-600 p-6 rounded-3xl text-white shadow-lg flex justify-between items-center">
-                                    <div>
-                                        <p className="text-[10px] uppercase font-black tracking-widest opacity-80">Target Daily</p>
-                                        <h2 className="text-2xl font-black italic">2400 KCAL</h2>
-                                    </div>
-                                    <Icon name="zap" size={32} className="opacity-50" />
+                        {tab === 'diet' && (
+                            <div className="space-y-4">
+                                <div className="bg-emerald-600 p-6 rounded-3xl text-white">
+                                    <p className="text-[10px] font-black opacity-70">TARGET</p>
+                                    <h2 className="text-2xl font-black tracking-tight uppercase italic">2400 Kcal / 125g Pro</h2>
                                 </div>
-                                {nutrition.map((meal, i) => (
+                                {diet.map((m, i) => (
                                     <div key={i} className="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm">
-                                        <h4 className="font-black text-slate-400 text-[10px] uppercase tracking-widest mb-3">{meal.time}</h4>
+                                        <h4 className="text-[10px] font-black text-slate-400 uppercase mb-3">{m.t}</h4>
                                         <div className="space-y-2">
-                                            {meal.options.map((opt, idx) => (
-                                                <div key={idx} className="p-3 bg-slate-50 rounded-2xl border border-slate-100 text-[11px] font-bold text-slate-700">
+                                            {m.o.map((opt, idx) => (
+                                                <div key={idx} className="p-3 bg-slate-50 rounded-xl text-[11px] font-bold text-slate-700">
                                                     <span className="text-emerald-500 mr-2">{idx+1}</span> {opt}
                                                 </div>
                                             ))}
@@ -171,37 +144,37 @@
                             </div>
                         )}
 
-                        {activeTab === 'progress' && (
-                            <div className="bg-white p-10 rounded-[3rem] shadow-sm border border-slate-100 text-center space-y-6">
-                                <div className="bg-indigo-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto text-indigo-600">
-                                    <Icon name="trending-up" size={40} />
+                        {tab === 'goals' && (
+                            <div className="p-10 text-center space-y-6">
+                                <div className="w-24 h-24 bg-indigo-100 rounded-full mx-auto flex items-center justify-center text-indigo-600">
+                                    <Icons.Chart />
                                 </div>
-                                <h2 className="text-2xl font-black text-slate-800 uppercase tracking-tighter">Target: 64KG</h2>
-                                <p className="text-xs text-slate-400 font-bold uppercase tracking-widest italic">3 Allenamenti Full-Body / Settimana</p>
+                                <h2 className="text-2xl font-black text-slate-800 tracking-tighter italic uppercase">Road to July</h2>
+                                <div className="space-y-2 text-left bg-white p-5 rounded-3xl border border-slate-100">
+                                    <p className="text-xs font-bold text-slate-600 uppercase tracking-widest">✅ Braccia: +2cm</p>
+                                    <p className="text-xs font-bold text-slate-600 uppercase tracking-widest">✅ V-Line: Visible</p>
+                                    <p className="text-xs font-bold text-slate-600 uppercase tracking-widest">✅ Peso: 64kg</p>
+                                </div>
                             </div>
                         )}
                     </main>
 
-                    <nav className="fixed bottom-6 left-6 right-6 bg-white/95 backdrop-blur-xl border border-slate-200 h-20 flex items-center justify-around shadow-2xl rounded-[2.5rem] px-2 z-[100]">
-                        <button onClick={() => setActiveTab('workout')} className={`flex-1 flex flex-col items-center gap-1 ${activeTab === 'workout' ? 'text-indigo-600' : 'text-slate-300'}`}>
-                            <Icon name="dumbbell" size={24} />
-                            <span className="text-[8px] font-black uppercase">Power</span>
+                    <nav className="fixed bottom-6 left-6 right-6 bg-white/95 border border-slate-200 h-20 rounded-[2rem] shadow-2xl flex justify-around items-center px-4">
+                        <button onClick={() => setTab('workout')} className={`flex flex-col items-center ${tab === 'workout' ? 'text-indigo-600' : 'text-slate-300'}`}>
+                            <Icons.Dumbbell /> <span className="text-[8px] font-black uppercase mt-1">Gym</span>
                         </button>
-                        <button onClick={() => setActiveTab('nutrition')} className={`flex-1 flex flex-col items-center gap-1 ${activeTab === 'nutrition' ? 'text-emerald-600' : 'text-slate-300'}`}>
-                            <Icon name="utensils" size={24} />
-                            <span className="text-[8px] font-black uppercase">Fuel</span>
+                        <button onClick={() => setTab('diet')} className={`flex flex-col items-center ${tab === 'diet' ? 'text-emerald-600' : 'text-slate-300'}`}>
+                            <Icons.Utensils /> <span className="text-[8px] font-black uppercase mt-1">Food</span>
                         </button>
-                        <button onClick={() => setActiveTab('progress')} className={`flex-1 flex flex-col items-center gap-1 ${activeTab === 'progress' ? 'text-indigo-600' : 'text-slate-300'}`}>
-                            <Icon name="trending-up" size={24} />
-                            <span className="text-[8px] font-black uppercase">Goal</span>
+                        <button onClick={() => setTab('goals')} className={`flex flex-col items-center ${tab === 'goals' ? 'text-indigo-600' : 'text-slate-300'}`}>
+                            <Icons.Chart /> <span className="text-[8px] font-black uppercase mt-1">Goal</span>
                         </button>
                     </nav>
                 </div>
             );
         };
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
     </script>
 </body>
 </html>
