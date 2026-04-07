@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Aesthetic Gym</title>
+    <title>Aesthetic Pro</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -11,131 +11,208 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
     <style>
-        body { -webkit-tap-highlight-color: transparent; }
+        body { -webkit-tap-highlight-color: transparent; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
+        input[type="number"] { -moz-appearance: textfield; }
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
     </style>
 </head>
-<body class="bg-slate-50">
+<body class="bg-slate-50 text-slate-900">
     <div id="root"></div>
 
     <script type="text/babel">
         const { useState, useEffect } = React;
 
-        // Icone SVG integrate per evitare crash esterni
+        // SVG Icons per massima stabilità
         const Icons = {
-            Dumbbell: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6.5 6.5 3 10l3.5 3.5m11-7L21 10l-3.5 3.5"/><path d="m18 7-11 10"/><path d="m3 10 18 0"/><path d="m14 7 3.5 3.5-3.5 3.5"/><path d="m6.5 6.5 3.5 3.5-3.5 3.5"/></svg>,
-            Utensils: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>,
-            Chart: () => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+            Dumbbell: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M6.5 6.5 3 10l3.5 3.5m11-7L21 10l-3.5 3.5"/><path d="m18 7-11 10"/><path d="m14 7 3.5 3.5-3.5 3.5"/><path d="m6.5 6.5 3.5 3.5-3.5 3.5"/></svg>,
+            Food: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>,
+            Settings: () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2l-.2.8a1 1 0 0 1-1.2.7l-.8-.2a2 2 0 0 0-2.5 1.1l-.2.4a2 2 0 0 0 1.1 2.5l.8.2a1 1 0 0 1 .7 1.2l-.2.8a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2l.2-.8a1 1 0 0 1 1.2-.7l.8.2a2 2 0 0 0 2.5-1.1l.2-.4a2 2 0 0 0-1.1-2.5l-.8-.2a1 1 0 0 1-.7-1.2l.2-.8a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>,
+            Save: () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
         };
+
+        const defaultWorkout = {
+            A: {
+                name: "Routine A: Massa/Spessore",
+                warmup: "7' Tapis Roulant (Pendenza 5%) + Mobilità",
+                exs: [
+                    { id: 'a1', n: 'Lento Avanti Manubri', s: '3x8-10', t: 'Scendi sotto le orecchie.' },
+                    { id: 'a2', n: 'Lat Machine Pr. Larga', s: '3x10', t: 'Tira con i gomiti.' },
+                    { id: 'a3', n: 'Panca Piana Manubri', s: '3x10', t: 'Strizza il petto.' },
+                    { id: 'a4', n: 'SS: Curl EZ (Bic.)', s: '4x10', t: 'Superset parte 1.' },
+                    { id: 'a5', n: 'SS: French Press (Tri.)', s: '4x10', t: 'Gomiti stretti.' },
+                    { id: 'a6', n: 'Alzate Laterali', s: '3x15', t: 'Mignolo verso l alto.' },
+                    { id: 'a7', n: 'Facepull ai Cavi', s: '3x12', t: 'Spalle 3D.' }
+                ],
+                abs: "Leg Raises 3x15 + Plank 3x60s"
+            },
+            B: {
+                name: "Routine B: Ampiezza/V-Shape",
+                warmup: "7' Tapis Roulant + Circonduzioni",
+                exs: [
+                    { id: 'b1', n: 'Trazioni o Lat Stretta', s: '3xMax/10', t: 'Target V-Shape.' },
+                    { id: 'b2', n: 'Panca Inclinata Man.', s: '3x10', t: 'Focus petto alto.' },
+                    { id: 'b3', n: 'Alzate Laterali Cavi', s: '3x12', t: 'Tensione costante.' },
+                    { id: 'b4', n: 'SS: Hammer Curl (Bic.)', s: '4x12', t: 'Spessore braccio.' },
+                    { id: 'b5', n: 'SS: Pushdown Corda (Tri.)', s: '4x12', t: 'Spremi in fondo.' },
+                    { id: 'b6', n: 'Curl Panca Inc. 45°', s: '2x12', t: 'Max stretch bicipite.' },
+                    { id: 'b7', n: 'Dips (Panche/Parall.)', s: '3xMax', t: 'Volume tricipiti.' }
+                ],
+                abs: "Woodchopper 3x15 + Bicycle 3x20"
+            }
+        };
+
+        const diet = [
+            { t: "Colazione", v: [
+                { d: "80g Avena + 150g Albume + 1 Uovo", k: 510, p: 32 },
+                { d: "250g Yogurt Greco + 50g Granola + Noci", k: 480, p: 30 },
+                { d: "Pane + 100g Bresaola + Avocado", k: 520, p: 35 }
+            ]},
+            { t: "Pranzo", v: [
+                { d: "100g Riso + 150g Pollo + Olio", k: 680, p: 40 },
+                { d: "100g Pasta + 150g Manzo Magro", k: 710, p: 38 },
+                { d: "100g Quinoa + 150g Tonno + Olio", k: 650, p: 39 }
+            ]},
+            { t: "Spuntino", v: [
+                { d: "Barretta Proteica + 1 Mela", k: 280, p: 20 },
+                { d: "30g Parmigiano + 1 Pera", k: 250, p: 12 },
+                { d: "150g Skyr + Mandorle", k: 270, p: 22 }
+            ]},
+            { t: "Cena", v: [
+                { d: "150g Salmone + 200g Patate + Verdur", k: 650, p: 35 },
+                { d: "200g Orata + 80g CousCous + Olio", k: 610, p: 42 },
+                { d: "150g Tacchino + 60g Pane + Olio", k: 590, p: 38 }
+            ]}
+        ];
 
         const App = () => {
             const [tab, setTab] = useState('workout');
             const [routine, setRoutine] = useState('A');
-            const [data, setData] = useState(() => {
-                const saved = localStorage.getItem('gym_v5');
-                return saved ? JSON.parse(saved) : {};
+            const [isEdit, setIsEdit] = useState(false);
+            const [workoutData, setWorkoutData] = useState(() => {
+                try {
+                    const s = localStorage.getItem('aesthetic_workout_v6');
+                    return s ? JSON.parse(s) : defaultWorkout;
+                } catch(e) { return defaultWorkout; }
+            });
+            const [weights, setWeights] = useState(() => {
+                try {
+                    const s = localStorage.getItem('aesthetic_weights_v6');
+                    return s ? JSON.parse(s) : {};
+                } catch(e) { return {}; }
             });
 
-            useEffect(() => { localStorage.setItem('gym_v5', JSON.stringify(data)); }, [data]);
+            useEffect(() => {
+                localStorage.setItem('aesthetic_workout_v6', JSON.stringify(workoutData));
+                localStorage.setItem('aesthetic_weights_v6', JSON.stringify(weights));
+            }, [workoutData, weights]);
 
-            const workout = {
-                A: {
-                    name: "Routine A: Massa/Spessore",
-                    warmup: "7' Tapis Roulant (Pendenza 5%) + Mobilità Spalle",
-                    exs: [
-                        { id: 'a1', n: 'Lento Avanti Manubri', s: '3x8-10', t: 'Spalle: scendi fin sotto le orecchie.' },
-                        { id: 'a2', n: 'Lat Machine Pr. Larga', s: '3x10', t: 'Tira con i gomiti, non con le mani.' },
-                        { id: 'a3', n: 'Panca Piana Manubri', s: '3x10', t: 'Strizza il petto in risalita.' },
-                        { id: 'a4', n: 'SS: Curl EZ (Bicipiti)', s: '4x10', t: 'Parte 1 del superset.' },
-                        { id: 'a5', n: 'SS: French Press (Tric.)', s: '4x10', t: 'Parte 2: gomiti stretti.' },
-                        { id: 'a6', n: 'Alzate Laterali', s: '3x15', t: 'Mignolo verso l alto.' },
-                        { id: 'a7', n: 'Facepull ai Cavi', s: '3x12', t: 'Spalle 3D: tira verso la fronte.' }
-                    ],
-                    abs: "Leg Raises 3x15 + Plank 3x60s"
-                },
-                B: {
-                    name: "Routine B: Ampiezza/V-Shape",
-                    warmup: "7' Tapis Roulant + Circonduzioni braccia",
-                    exs: [
-                        { id: 'b1', n: 'Trazioni o Lat Stretta', s: '3xMax/10', t: 'Fondamentale per la V.' },
-                        { id: 'b2', n: 'Panca Inclinata Man.', s: '3x10', t: 'Focus petto alto.' },
-                        { id: 'b3', n: 'Alzate Laterali Cavi', s: '3x12', t: 'Tensione costante.' },
-                        { id: 'b4', n: 'SS: Hammer Curl (Bic.)', s: '4x12', t: 'Spessore del braccio.' },
-                        { id: 'b5', n: 'SS: Pushdown Corda (Tri.)', s: '4x12', t: 'Spremi in fondo aprendo la corda.' },
-                        { id: 'b6', n: 'Curl Panca Inc. 45°', s: '2x12', t: 'Massimo stretch bicipite.' },
-                        { id: 'b7', n: 'Dips (Panche/Parall.)', s: '3xMax', t: 'Volume totale braccia.' }
-                    ],
-                    abs: "Woodchopper 3x15 + Bicycle Crunch 3x20"
-                }
+            const updateEx = (id, field, val) => {
+                const newWorkout = JSON.parse(JSON.stringify(workoutData));
+                const ex = newWorkout[routine].exs.find(e => e.id === id);
+                if (ex) ex[field] = val;
+                setWorkoutData(newWorkout);
             };
 
-            const diet = [
-                { t: "Colazione", o: ["80g Avena + 150g Albume", "250g Yogurt Greco + Granola", "Pane + Bresaola + Avocado"] },
-                { t: "Pranzo", o: ["100g Riso + 150g Pollo + Olio", "100g Pasta + 150g Manzo", "100g Quinoa + 150g Tonno"] },
-                { t: "Spuntino", o: ["Barretta Proteica + Mela", "30g Parmigiano + Pera", "150g Skyr + Mandorle"] },
-                { t: "Cena", o: ["150g Salmone + 200g Patate", "200g Orata + 80g CousCous", "150g Tacchino + Pane + Verdura"] }
-            ];
-
             return (
-                <div className="max-w-md mx-auto min-h-screen flex flex-col pb-24">
-                    <header className="bg-indigo-700 p-6 text-white rounded-b-3xl shadow-lg">
-                        <h1 className="text-2xl font-black italic tracking-tighter">AESTHETIC V5</h1>
-                        <p className="text-[10px] font-bold opacity-70 uppercase tracking-widest">31y | 60kg | Goal: 64kg</p>
+                <div className="max-w-md mx-auto min-h-screen flex flex-col pb-28 bg-slate-50">
+                    <header className="bg-indigo-700 p-6 text-white rounded-b-[2.5rem] shadow-xl sticky top-0 z-50">
+                        <div className="flex justify-between items-center">
+                            <div>
+                                <h1 className="text-2xl font-black italic tracking-tighter">AESTHETIC PRO</h1>
+                                <p className="text-[10px] font-bold opacity-60 uppercase">V-Shape Protocol v6</p>
+                            </div>
+                            <button onClick={() => setIsEdit(!isEdit)} className={`p-3 rounded-full transition-all ${isEdit ? 'bg-amber-400 rotate-90 shadow-lg' : 'bg-white/10'}`}>
+                                {isEdit ? <Icons.Save /> : <Icons.Settings />}
+                            </button>
+                        </div>
                     </header>
 
-                    <main className="p-4 flex-1 overflow-y-auto no-scrollbar">
+                    <main className="p-4 flex-1 overflow-x-hidden">
                         {tab === 'workout' && (
                             <div className="space-y-6">
-                                <div className="flex bg-white p-1 rounded-2xl shadow-sm border">
-                                    <button onClick={() => setRoutine('A')} className={`flex-1 py-3 rounded-xl font-bold text-sm ${routine === 'A' ? 'bg-indigo-600 text-white' : 'text-slate-400'}`}>Routine A</button>
-                                    <button onClick={() => setRoutine('B')} className={`flex-1 py-3 rounded-xl font-bold text-sm ${routine === 'B' ? 'bg-indigo-600 text-white' : 'text-slate-400'}`}>Routine B</button>
+                                <div className="flex bg-white p-1 rounded-2xl shadow-inner border">
+                                    <button onClick={() => setRoutine('A')} className={`flex-1 py-3 rounded-xl font-bold text-sm ${routine === 'A' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400'}`}>Routine A</button>
+                                    <button onClick={() => setRoutine('B')} className={`flex-1 py-3 rounded-xl font-bold text-sm ${routine === 'B' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400'}`}>Routine B</button>
                                 </div>
 
-                                <div className="bg-amber-100/50 border border-amber-200 p-4 rounded-2xl">
-                                    <p className="text-[10px] font-black text-amber-600 uppercase">Warmup</p>
-                                    <p className="text-xs font-bold text-amber-800">{workout[routine].warmup}</p>
+                                <div className="bg-amber-50 border border-amber-100 p-4 rounded-2xl">
+                                    <p className="text-[10px] font-black text-amber-600 uppercase mb-1">Riscaldamento</p>
+                                    {isEdit ? 
+                                        <input className="w-full bg-white p-2 rounded text-xs font-bold" value={workoutData[routine].warmup} onChange={e => {
+                                            const nw = {...workoutData}; nw[routine].warmup = e.target.value; setWorkoutData(nw);
+                                        }} />
+                                        : <p className="text-xs font-bold text-amber-900 leading-tight">{workoutData[routine].warmup}</p>
+                                    }
                                 </div>
 
-                                <div className="space-y-3">
-                                    {workout[routine].exs.map(ex => (
-                                        <div key={ex.id} className="bg-white p-4 rounded-3xl border border-slate-100 shadow-sm">
-                                            <div className="flex justify-between items-center mb-2">
-                                                <div>
-                                                    <h4 className="font-black text-slate-800 text-sm uppercase leading-tight">{ex.n}</h4>
-                                                    <p className="text-indigo-600 text-[10px] font-bold">{ex.s}</p>
+                                <div className="space-y-4">
+                                    {workoutData[routine].exs.map(ex => (
+                                        <div key={ex.id} className="bg-white p-5 rounded-[2rem] border border-slate-100 shadow-sm transition-all active:scale-[0.98]">
+                                            <div className="flex justify-between items-start gap-4">
+                                                <div className="flex-1">
+                                                    {isEdit ? (
+                                                        <div className="space-y-2">
+                                                            <input className="w-full font-black text-slate-800 text-sm uppercase p-1 border-b" value={ex.n} onChange={e => updateEx(ex.id, 'n', e.target.value)} />
+                                                            <input className="w-full text-indigo-600 text-[10px] font-bold p-1 border-b" value={ex.s} onChange={e => updateEx(ex.id, 's', e.target.value)} />
+                                                            <input className="w-full text-[9px] text-slate-400 p-1 border-b" value={ex.t} onChange={e => updateEx(ex.id, 't', e.target.value)} />
+                                                        </div>
+                                                    ) : (
+                                                        <>
+                                                            <h4 className="font-black text-slate-800 text-sm uppercase leading-tight mb-1">{ex.n}</h4>
+                                                            <span className="text-indigo-600 text-[10px] font-black tracking-widest">{ex.s}</span>
+                                                        </>
+                                                    )}
                                                 </div>
-                                                <input 
-                                                    type="number" placeholder="KG"
-                                                    className="w-14 h-10 bg-slate-100 rounded-xl text-center font-bold text-indigo-600 outline-none"
-                                                    value={data[ex.id] || ''}
-                                                    onChange={e => setData({...data, [ex.id]: e.target.value})}
-                                                />
+                                                {!isEdit && (
+                                                    <input 
+                                                        type="number" placeholder="KG"
+                                                        className="w-14 h-12 bg-slate-100 rounded-2xl text-center font-black text-indigo-600 text-sm focus:ring-2 focus:ring-indigo-500 outline-none"
+                                                        value={weights[ex.id] || ''}
+                                                        onChange={e => setWeights({...weights, [ex.id]: e.target.value})}
+                                                    />
+                                                )}
                                             </div>
-                                            <p className="text-[9px] text-slate-400 font-bold uppercase italic leading-tight">{ex.t}</p>
+                                            {!isEdit && <p className="mt-3 text-[10px] text-slate-400 font-bold uppercase italic leading-tight border-t pt-2">{ex.t}</p>}
                                         </div>
                                     ))}
                                 </div>
 
-                                <div className="bg-indigo-50 border border-indigo-100 p-5 rounded-3xl">
-                                    <p className="text-[10px] font-black text-indigo-600 uppercase mb-1">Addome V-Shape</p>
-                                    <p className="text-sm font-black text-indigo-900 italic">{workout[routine].abs}</p>
+                                <div className="bg-indigo-50 border border-indigo-100 p-5 rounded-[2rem]">
+                                    <p className="text-[10px] font-black text-indigo-600 uppercase mb-2">Addome V-Shape Finali</p>
+                                    {isEdit ? 
+                                        <input className="w-full bg-white p-2 rounded text-xs font-bold" value={workoutData[routine].abs} onChange={e => {
+                                            const nw = {...workoutData}; nw[routine].abs = e.target.value; setWorkoutData(nw);
+                                        }} />
+                                        : <p className="text-sm font-black text-indigo-900 italic">{workoutData[routine].abs}</p>
+                                    }
                                 </div>
                             </div>
                         )}
 
                         {tab === 'diet' && (
-                            <div className="space-y-4">
-                                <div className="bg-emerald-600 p-6 rounded-3xl text-white">
-                                    <p className="text-[10px] font-black opacity-70">TARGET</p>
-                                    <h2 className="text-2xl font-black tracking-tight uppercase italic">2400 Kcal / 125g Pro</h2>
+                            <div className="space-y-6">
+                                <div className="bg-emerald-600 p-8 rounded-[3rem] text-white shadow-lg relative overflow-hidden">
+                                    <div className="relative z-10">
+                                        <p className="text-[10px] font-black opacity-70 tracking-[0.2em] mb-1 uppercase">Daily Target Fuel</p>
+                                        <h2 className="text-3xl font-black italic tracking-tighter uppercase">2400 Kcal</h2>
+                                        <div className="flex gap-4 mt-3">
+                                            <div className="bg-white/20 px-3 py-1 rounded-full text-[10px] font-bold">PRO: 125g</div>
+                                            <div className="bg-white/20 px-3 py-1 rounded-full text-[10px] font-bold">FAT: 65g</div>
+                                        </div>
+                                    </div>
                                 </div>
                                 {diet.map((m, i) => (
-                                    <div key={i} className="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm">
-                                        <h4 className="text-[10px] font-black text-slate-400 uppercase mb-3">{m.t}</h4>
-                                        <div className="space-y-2">
-                                            {m.o.map((opt, idx) => (
-                                                <div key={idx} className="p-3 bg-slate-50 rounded-xl text-[11px] font-bold text-slate-700">
-                                                    <span className="text-emerald-500 mr-2">{idx+1}</span> {opt}
+                                    <div key={i} className="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm">
+                                        <h4 className="text-[10px] font-black text-slate-300 uppercase tracking-widest mb-4 border-b pb-2">{m.t}</h4>
+                                        <div className="space-y-3">
+                                            {m.v.map((opt, idx) => (
+                                                <div key={idx} className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                                                    <p className="text-xs font-bold text-slate-700 leading-snug mb-2">{opt.d}</p>
+                                                    <div className="flex gap-2">
+                                                        <span className="text-[9px] font-black bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-md uppercase">{opt.k} Kcal</span>
+                                                        <span className="text-[9px] font-black bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-md uppercase">P: {opt.p}g</span>
+                                                    </div>
                                                 </div>
                                             ))}
                                         </div>
@@ -143,31 +220,14 @@
                                 ))}
                             </div>
                         )}
-
-                        {tab === 'goals' && (
-                            <div className="p-10 text-center space-y-6">
-                                <div className="w-24 h-24 bg-indigo-100 rounded-full mx-auto flex items-center justify-center text-indigo-600">
-                                    <Icons.Chart />
-                                </div>
-                                <h2 className="text-2xl font-black text-slate-800 tracking-tighter italic uppercase">Road to July</h2>
-                                <div className="space-y-2 text-left bg-white p-5 rounded-3xl border border-slate-100">
-                                    <p className="text-xs font-bold text-slate-600 uppercase tracking-widest">✅ Braccia: +2cm</p>
-                                    <p className="text-xs font-bold text-slate-600 uppercase tracking-widest">✅ V-Line: Visible</p>
-                                    <p className="text-xs font-bold text-slate-600 uppercase tracking-widest">✅ Peso: 64kg</p>
-                                </div>
-                            </div>
-                        )}
                     </main>
 
-                    <nav className="fixed bottom-6 left-6 right-6 bg-white/95 border border-slate-200 h-20 rounded-[2rem] shadow-2xl flex justify-around items-center px-4">
-                        <button onClick={() => setTab('workout')} className={`flex flex-col items-center ${tab === 'workout' ? 'text-indigo-600' : 'text-slate-300'}`}>
-                            <Icons.Dumbbell /> <span className="text-[8px] font-black uppercase mt-1">Gym</span>
+                    <nav className="fixed bottom-6 left-6 right-6 bg-white/95 border border-slate-200 h-20 rounded-[2.5rem] shadow-2xl flex justify-around items-center px-4 z-[100]">
+                        <button onClick={() => setTab('workout')} className={`flex-1 flex flex-col items-center gap-1 transition-all ${tab === 'workout' ? 'text-indigo-600 scale-110' : 'text-slate-300'}`}>
+                            <Icons.Dumbbell /> <span className="text-[9px] font-black uppercase tracking-tighter mt-1">Gym</span>
                         </button>
-                        <button onClick={() => setTab('diet')} className={`flex flex-col items-center ${tab === 'diet' ? 'text-emerald-600' : 'text-slate-300'}`}>
-                            <Icons.Utensils /> <span className="text-[8px] font-black uppercase mt-1">Food</span>
-                        </button>
-                        <button onClick={() => setTab('goals')} className={`flex flex-col items-center ${tab === 'goals' ? 'text-indigo-600' : 'text-slate-300'}`}>
-                            <Icons.Chart /> <span className="text-[8px] font-black uppercase mt-1">Goal</span>
+                        <button onClick={() => setTab('diet')} className={`flex-1 flex flex-col items-center gap-1 transition-all ${tab === 'diet' ? 'text-emerald-600 scale-110' : 'text-slate-300'}`}>
+                            <Icons.Food /> <span className="text-[9px] font-black uppercase tracking-tighter mt-1">Fuel</span>
                         </button>
                     </nav>
                 </div>
