@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Umberto Case</title>
+    <title>Aesthetic Master v12</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -12,8 +12,9 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         input[type="number"] { -webkit-appearance: none; margin: 0; outline: none; border: none; }
         .tab-active { background: #4f46e5; color: white; box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4); }
-        .gif-container { background: #f8fafc; border-radius: 1.5rem; overflow: hidden; height: 170px; position: relative; }
-        .gif-container img { width: 100%; height: 100%; object-fit: cover; mix-blend-mode: multiply; }
+        /* Box GIF aumentato e fix per immagini intere */
+        .gif-container { background: #ffffff; border-radius: 1.5rem; overflow: hidden; height: 240px; position: relative; border: 1px solid #f1f5f9; }
+        .gif-container img { width: 100%; height: 100%; object-fit: contain; }
         .card-glow { box-shadow: 0 10px 30px -5px rgba(79, 70, 229, 0.1); }
     </style>
 </head>
@@ -21,7 +22,7 @@
     <div id="app"></div>
 
     <script>
-        // --- CONFIGURAZIONE DATABASE COMPLETO ---
+        // --- CONFIGURAZIONE DATABASE COMPLETO V12 ---
         const defaultData = {
             routine: 'A', tab: 'workout', isEdit: false,
             workout: {
@@ -35,7 +36,7 @@
                         { id: 'a2', n: 'Lat Machine Pr. Larga', s: '3x10', t: 'V-Taper Spessore', e: 'Tira la sbarra al petto. Immagina di guidare il movimento con i GOMITI, non con le mani. Strizza le scapole in fondo.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Lat-Pulldown.gif' },
                         { id: 'a3', n: 'Panca Piana Manubri', s: '3x10', t: 'Massa Petto', e: 'Scendi lentamente sentendo lo stretch. In risalita, strizza il petto come se volessi unire i bicipiti. Piedi ben piantati.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Dumbbell-Press.gif' },
                         { id: 'a4', n: 'SS: Curl Bilanciere EZ', s: '4x10', t: 'Bicipiti Massa', e: 'Gomiti incollati ai fianchi. NON oscillare con la schiena. Spremi il bicipite nel punto più alto del movimento.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Z-Bar-Curl.gif' },
-                        { id: 'a5', n: 'SS: French Press EZ', s: '4x10', t: 'Tricipiti Spessore', e: 'Porta il bilanciere verso la fronte. Tieni i gomiti stretti e fermi nello spazio. Estendi completamente il braccio.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/EZ-Bar-Lying-Triceps-Extension.gif' },
+                        { id: 'a5', n: 'SS: French Press EZ', s: '4x10', t: 'Tricipiti Spessore', e: 'Porta il bilanciere verso la fronte. Tieni i gomiti stretti e fermi nello spazio. Estendi completamente il braccio.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/ez-bar-lying-triceps-extension.gif' },
                         { id: 'a6', n: 'Alzate Laterali', s: '3x15', t: 'Larghezza Spalle', e: 'Mignolo leggermente verso l alto. Non superare la linea spalle. Movimento a pendolo controllato, NO slanci.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Dumbbell-Lateral-Raise.gif' },
                         { id: 'a7', n: 'Facepull ai Cavi', s: '3x12', t: 'Dettaglio Posteriore', e: 'Tira la corda verso la fronte aprendola verso l esterno. Fondamentale per spalle tonde e postura da ufficio.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Face-Pull.gif' }
                     ]
@@ -49,9 +50,9 @@
                         { id: 'b1', n: 'Trazioni o Lat Stretta', s: '3xMax/10', t: 'Ampiezza Dorsale', e: 'Cerca il massimo allungamento in alto. Tira portando il petto verso la sbarra. Fondamentale per allargare la schiena.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Pull-up.gif' },
                         { id: 'b2', n: 'Panca Inclinata Man.', s: '3x10', t: 'Focus Petto Alto', e: 'Inclinazione panca 30 gradi. Spingi verso l alto e l interno. Crea il look pieno sotto le clavicole.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Incline-Dumbbell-Press.gif' },
                         { id: 'b3', n: 'Alzate Laterali Cavi', s: '3x12', t: 'Tensione Spalle', e: 'Cavo basso. Passa il braccio dietro la schiena per lo stretch. Non sollevare la scapola, isola il deltoide.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Cable-Lateral-Raise.gif' },
-                        { id: 'b4', n: 'SS: Hammer Curl', s: '4x12', t: 'Spessore Brachiale', e: 'Presa a martello (palmi che si guardano). Allarga il braccio lateralmente. Fondamentale per la circonferenza.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Dumbbell-Hammer-Curl.gif' },
-                        { id: 'b5', n: 'SS: Pushdown Corda', s: '4x12', t: 'Dettaglio Tricipiti', e: 'Gomiti bloccati. In fondo al movimento APRI la corda verso l esterno. Strizza il tricipite per 1 secondo.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Rope-Pushdown.gif' },
-                        { id: 'b6', n: 'Curl Panca Inc. 45°', s: '2x12', t: 'Picco Bicipite', e: 'Lascia cadere le braccia dietro il busto. Massimo stretch. Non muovere i gomiti durante il curl.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Incline-Dumbbell-Curl.gif' },
+                        { id: 'b4', n: 'SS: Hammer Curl', s: '4x12', t: 'Spessore Brachiale', e: 'Presa a martello (palmi che si guardano). Allarga il braccio lateralmente. Fondamentale per la circonferenza.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/dumbbell-hammer-curl.gif' },
+                        { id: 'b5', n: 'SS: Pushdown Corda', s: '4x12', t: 'Dettaglio Tricipiti', e: 'Gomiti bloccati. In fondo al movimento APRI la corda verso l esterno. Strizza il tricipite per 1 secondo.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/rope-pushdown.gif' },
+                        { id: 'b6', n: 'Curl Panca Inc. 45°', s: '2x12', t: 'Picco Bicipite', e: 'Lascia cadere le braccia dietro il busto. Massimo stretch. Non muovere i gomiti durante il curl.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/incline-dumbbell-curl.gif' },
                         { id: 'b7', n: 'Dips Panche/Parall.', s: '3xMax', t: 'Finisher Braccia', e: 'Gomiti stretti per focus tricipiti. Scendi finchè l omero è parallelo al suolo e risali esplosivo.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Bench-Dips.gif' }
                     ]
                 }
@@ -82,8 +83,8 @@
         };
 
         // --- ENGINE ---
-        let state = JSON.parse(localStorage.getItem('aesthetic_v11')) || defaultData;
-        function save() { localStorage.setItem('aesthetic_v11', JSON.stringify(state)); render(); }
+        let state = JSON.parse(localStorage.getItem('aesthetic_v12')) || defaultData;
+        function save() { localStorage.setItem('aesthetic_v12', JSON.stringify(state)); render(); }
 
         const iconGym = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5 3 10l3.5 3.5m11-7L21 10l-3.5 3.5"/><path d="m18 7-11 10"/><path d="m14 7 3.5 3.5-3.5 3.5"/><path d="m6.5 6.5 3.5 3.5-3.5 3.5"/></svg>`;
         const iconFood = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>`;
@@ -127,7 +128,7 @@
                         ${r.exs.map(ex => `
                             <div class="bg-white p-2 rounded-[2.5rem] border border-slate-100 card-glow overflow-hidden">
                                 <div class="gif-container">
-                                    <img src="${ex.g}" loading="lazy">
+                                    <img src="${ex.g}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x300?text=Caricamento...'">
                                     <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-3 py-2 rounded-2xl shadow-lg">
                                         <input type="number" onchange="state.weights['${ex.id}']=this.value; save()" 
                                                class="w-12 text-center font-black text-indigo-700 bg-transparent text-sm" 
