@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Aesthetic Master OS v18</title>
+    <title>Aesthetic Master OS v19</title>
+    <meta name="referrer" content="no-referrer">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -21,7 +22,7 @@
     <div id="app"></div>
 
     <script>
-        // --- DATABASE V18: INTEGRATO VADEMECUM STRETCHING ---
+        // --- DATABASE AGGIORNATO V19 ---
         const initialData = {
             tab: 'gym',
             routine: 'A',
@@ -32,32 +33,32 @@
             workout: {
                 A: {
                     name: "Power & Thickness",
-                    concept: "Focus sullo spessore del busto e forza esplosiva. Usiamo carichi alti per creare una base densa e compatta.",
+                    concept: "Focus sullo spessore del busto e forza esplosiva. Usiamo carichi alti per creare una base muscolare densa e compatta.",
                     warmup: "7' Tapis (Pendenza 5%) + Mobilità Spalle + 2 serie leggere del 1° esercizio.",
                     abs: "Leg Raises 3x15 (Arrotola il bacino) + Plank 3x60s (Spremi glutei).",
                     exs: [
-                        { id: 'a1', n: 'Lento Avanti Manubri', s: '3x8-10', t: 'Spalle Ant.', e: 'Siediti dritto. Scendi fin sotto le orecchie. Spingi senza toccare i pesi. NON inarcare eccessivamente la schiena.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Dumbbell-Shoulder-Press.gif' },
-                        { id: 'a2', n: 'Lat Machine Pr. Larga', s: '3x10', t: 'V-Taper Spessore', e: 'Guida con i GOMITI, non con le mani. Strizza le scapole in fondo. Busto leggermente inclinato.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Lat-Pulldown.gif' },
-                        { id: 'a3', n: 'Panca Piana Manubri', s: '3x10', t: 'Massa Petto', e: 'Scendi lentamente sentendo lo stretch. In risalita, strizza il petto come se volessi unire i bicipiti.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Dumbbell-Press.gif' },
-                        { id: 'a4', n: 'SS: Curl Bilanciere EZ', s: '4x10', t: 'Bicipiti Massa', e: 'Gomiti incollati ai fianchi. NON oscillare. Spremi il bicipite nel punto più alto del movimento.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Z-Bar-Curl.gif' },
-                        { id: 'a5', n: 'SS: French Press EZ', s: '4x10', t: 'Tricipiti Spessore', e: 'Bilanciere alla fronte. Tieni i gomiti stretti e fermi nello spazio. Estendi completamente.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/ez-bar-lying-triceps-extension.gif' },
-                        { id: 'a6', n: 'Alzate Laterali', s: '3x15', t: 'Larghezza Spalle', e: 'Mignolo leggermente in su. Non superare la linea spalle. Movimento controllato, no slanci.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Dumbbell-Lateral-Raise.gif' },
-                        { id: 'a7', n: 'Facepull ai Cavi', s: '3x12', t: 'Dettaglio/Postura', e: 'Tira la corda verso la fronte aprendo i gomiti. Utile per postura da ufficio e spalle tonde.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Face-Pull.gif' }
+                        { id: 'a1', n: 'Lento Avanti Manubri', s: '3x8-10', t: 'Spalle Ant.', e: 'Siediti dritto. Scendi fin sotto le orecchie. Spingi senza toccare i pesi.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Dumbbell-Shoulder-Press.gif' },
+                        { id: 'a2', n: 'Lat Machine Pr. Larga', s: '3x10', t: 'V-Taper Spessore', e: 'Guida con i GOMITI, non con le mani. Strizza le scapole in fondo.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Lat-Pulldown.gif' },
+                        { id: 'a3', n: 'Panca Piana Manubri', s: '3x10', t: 'Massa Petto', e: 'Scendi lentamente. In risalita, strizza il petto come se volessi unire i bicipiti.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Dumbbell-Press.gif' },
+                        { id: 'a4', n: 'SS: Curl Bilanciere EZ', s: '4x10', t: 'Bicipiti Massa', e: 'Gomiti incollati ai fianchi. NON oscillare. Spremi il bicipite in alto.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Z-Bar-Curl.gif' },
+                        { id: 'a5', n: 'SS: French Press EZ', s: '4x10', t: 'Tricipiti Spessore', e: 'Bilanciere alla fronte. Tieni i gomiti stretti e fermi.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/ez-bar-lying-triceps-extension.gif' },
+                        { id: 'a6', n: 'Alzate Laterali', s: '3x15', t: 'Larghezza Spalle', e: 'Mignolo leggermente in su. Non superare la linea spalle.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Dumbbell-Lateral-Raise.gif' },
+                        { id: 'a7', n: 'Facepull ai Cavi', s: '3x12', t: 'Dettaglio/Postura', e: 'Tira verso la fronte aprendo i gomiti. Utile per postura da ufficio.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Face-Pull.gif' }
                     ]
                 },
                 B: {
                     name: "Width & Definition",
-                    concept: "Focus sull ampiezza laterale (V-Shape) e isolamento braccia. Tensione costante per scolpire i dettagli.",
-                    warmup: "7' Tapis + Mobilità cuffia rotatori con elastico o pesetti da 1kg.",
-                    abs: "Woodchopper 3x15 (Taglia diagonale) + Bicycle Crunch 3x20 (Gomito-Ginocchio opposto).",
+                    concept: "Focus ampiezza laterale (V-Shape) e isolamento braccia. Tensione costante.",
+                    warmup: "7' Tapis + Mobilità cuffia rotatori con elastico.",
+                    abs: "Woodchopper 3x15 + Bicycle Crunch 3x20.",
                     exs: [
-                        { id: 'b1', n: 'Trazioni o Lat Stretta', s: '3xMax/10', t: 'Ampiezza Dorso', e: 'Massimo allungamento in alto. Tira portando il petto alla sbarra. Fondamentale per allargare.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Pull-up.gif' },
-                        { id: 'b2', n: 'Panca Inclinata Man.', s: '3x10', t: 'Petto Alto', e: 'Panca 30°. Spingi verso l alto e l interno. Crea il look pieno sotto le clavicole.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Incline-Dumbbell-Press.gif' },
-                        { id: 'b3', n: 'Alzate Laterali Cavi', s: '3x12', t: 'Tensione Spalle', e: 'Cavo basso dietro schiena per più stretch. Non sollevare la scapola, isola il deltoide.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Cable-Lateral-Raise.gif' },
-                        { id: 'b4', n: 'SS: Hammer Curl', s: '4x12', t: 'Spessore Brachiale', e: 'Presa a martello. Allarga il braccio lateralmente. Fondamentale per la circonferenza.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/dumbbell-hammer-curl.gif' },
-                        { id: 'b5', n: 'SS: Pushdown Corda', s: '4x12', t: 'Dettaglio Tricipiti', e: 'Gomiti bloccati. In fondo APRI la corda verso l esterno. Strizza per 1 secondo.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/rope-pushdown.gif' },
-                        { id: 'b6', n: 'Curl Panca Inc. 45°', s: '2x12', t: 'Picco Bicipite', e: 'Braccia dietro busto. Massimo stretch. Non muovere i gomiti durante il curl.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/incline-dumbbell-curl.gif' },
-                        { id: 'b7', n: 'Dips Panche', s: '3xMax', t: 'Finisher Braccia', e: 'Gomiti stretti. Scendi finchè l omero è parallelo e risali esplosivo.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Bench-Dips.gif' }
+                        { id: 'b1', n: 'Trazioni o Lat Stretta', s: '3xMax/10', t: 'Ampiezza Dorso', e: 'Massimo allungamento in alto. Petto verso la sbarra.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Pull-up.gif' },
+                        { id: 'b2', n: 'Panca Inclinata Man.', s: '3x10', t: 'Petto Alto', e: 'Panca 30°. Spingi verso l alto e l interno.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Incline-Dumbbell-Press.gif' },
+                        { id: 'b3', n: 'Alzate Laterali Cavi', s: '3x12', t: 'Tensione Spalle', e: 'Cavo basso dietro schiena per più stretch.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Cable-Lateral-Raise.gif' },
+                        { id: 'b4', n: 'SS: Hammer Curl', s: '4x12', t: 'Spessore Brachiale', e: 'Presa a martello. Allarga il braccio lateralmente.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/dumbbell-hammer-curl.gif' },
+                        { id: 'b5', n: 'SS: Pushdown Corda', s: '4x12', t: 'Dettaglio Tricipiti', e: 'In fondo APRI la corda verso l esterno.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/rope-pushdown.gif' },
+                        { id: 'b6', n: 'Curl Panca Inc. 45°', s: '2x12', t: 'Picco Bicipite', e: 'Braccia dietro busto. Massimo stretch.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/incline-dumbbell-curl.gif' },
+                        { id: 'b7', n: 'Dips Panche', s: '3xMax', t: 'Finisher Braccia', e: 'Gomiti stretti. Scendi finchè l omero è parallelo.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Bench-Dips.gif' }
                     ]
                 }
             },
@@ -77,31 +78,29 @@
                     { d: "Poke Media: Riso + Pollo/Tonno + Edamame + Avocado", k: 700, p: 35 },
                     { d: "Pronto: Pollo e Riso o Pasta al sugo (Supermercato)", k: 600, p: 30 },
                     { d: "Insalatona: Tonno + 2 Uova sode + 80g Pane + Olio", k: 620, p: 32 }
-                ]},
-                { t: "Spuntino", v: [
-                    { d: "1 Barretta Proteica (60g) + 1 Mela (150g)", k: 285, p: 20 },
-                    { d: "40g Parmigiano Reggiano + 1 Pera (150g)", k: 260, p: 13 },
-                    { d: "170g Skyr Bianco + 20g Mandorle", k: 275, p: 22 }
-                ]},
-                { t: "Cena", v: [
-                    { d: "150g Salmone + 250g Patate + 200g Asparagi + 5g Olio EVO", k: 650, p: 36 },
-                    { d: "200g Orata + 80g Couscous + 200g Broccoli + 15g Olio EVO", k: 620, p: 42 },
-                    { d: "150g Tacchino + 80g Pane integrale + Insalata + 15g Olio EVO", k: 600, p: 38 }
                 ]}
             ],
             stretches: [
+
                 { n: "Overhead Side Stretch", t: "Side Body / Lats", b: "Allunga la catena laterale, migliora la flessione spinale e la mobilità della cassa toracica.", g: "https://fitnessprogramer.com/wp-content/uploads/2026/01/standing-side-stretch.gif" },
+
                 { n: "Wall Back & Lat Stretch", t: "Upper Back / Lats", b: "Ripristina la mobilità della spalla e riduce la rigidità causata dal lavoro al PC.", g: "https://fitnessprogramer.com/wp-content/uploads/2026/01/wall-lat-stretch.gif" },
+
                 { n: "Kneeling Chest Stretch", t: "Pec / Upper Back", b: "Incoraggia l estensione spinale e allunga il petto, migliorando la postura.", g: "https://fitnessprogramer.com/wp-content/uploads/2022/12/Back-Pec-Stretch-for-Cooldown-Exercises.gif" },
+
                 { n: "Quadruped Side Stretch", t: "Lower Back / Lats", b: "Corregge gli squilibri di mobilità tra lato destro e sinistro in modo controllato.", g: "https://fitnessprogramer.com/wp-content/uploads/2026/01/kneeling-lat-stretch.gif" },
+
                 { n: "Standing Forward Fold", t: "Lower Back / Hamstrings", b: "Decompressione spinale e riduzione della tensione della catena posteriore.", g: "https://www.fitnessprogramer.com/wp-content/uploads/2021/05/Standing-Hamstring-Stretch.gif" },
+
                 { n: "Kneeling Prayer Stretch", t: "Thoracic / Shoulders", b: "Migliora la mobilità toracica e contrasta le spalle chiuse in avanti.", g: "https://fitnessprogramer.com/wp-content/uploads/2026/01/kneeling-lat-stretch-on-bench.gif" },
+
                 { n: "Lumbar Extension", t: "Spinal Extensors", b: "Bilancia l eccessiva flessione spinale causata dal sedersi troppo a lungo.", g: "https://fitnessprogramer.com/wp-content/uploads/2026/01/Extension-Lombaire-sans-equipement.gif" }
+
             ]
         };
 
-        let state = JSON.parse(localStorage.getItem('aesthetic_v18')) || initialData;
-        function save() { localStorage.setItem('aesthetic_v18', JSON.stringify(state)); render(); }
+        let state = JSON.parse(localStorage.getItem('aesthetic_v19')) || initialData;
+        function save() { localStorage.setItem('aesthetic_v19', JSON.stringify(state)); render(); }
 
         const icons = {
             gym: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 12h12M6 8h12M6 16h12"/></svg>`,
@@ -121,8 +120,8 @@
             let html = `
                 <header class="bg-indigo-800 p-6 text-white rounded-b-[2.5rem] shadow-xl sticky top-0 z-50">
                     <div class="flex justify-between items-center">
-                        <h1 class="text-xl font-black italic uppercase">Umberto Case</h1>
-                        <span class="text-[9px] font-bold bg-white/20 px-3 py-1 rounded-full uppercase italic font-black tracking-widest leading-none">V18 MASTER</span>
+                        <h1 class="text-xl font-black italic uppercase leading-none">Aesthetic Master OS</h1>
+                        <span class="text-[9px] font-bold bg-white/20 px-3 py-1 rounded-full uppercase italic font-black">V19 PRO</span>
                     </div>
                 </header>
                 <main class="p-4 max-w-md mx-auto space-y-6 pb-32">
@@ -130,51 +129,45 @@
 
             if (state.tab === 'gym') {
                 html += `
-                    <div class="flex bg-white p-1 rounded-2xl shadow-inner border">
+                    <div class="flex bg-white p-1 rounded-2xl shadow-inner border border-slate-200">
                         <button onclick="state.routine='A'; save()" class="flex-1 py-3 rounded-xl font-black text-[10px] ${state.routine==='A'?'bg-indigo-600 text-white':'text-slate-400'} uppercase">Routine A</button>
                         <button onclick="state.routine='B'; save()" class="flex-1 py-3 rounded-xl font-black text-[10px] ${state.routine==='B'?'bg-indigo-600 text-white':'text-slate-400'} uppercase">Routine B</button>
                     </div>
                     <div class="bg-indigo-700 p-6 rounded-[2.5rem] text-white shadow-lg"><p class="text-[9px] font-black opacity-50 uppercase mb-1 italic">Concept Tecnico</p><p class="text-xs font-bold leading-relaxed italic">"${r.concept}"</p></div>
-                    <div class="bg-amber-100 border border-amber-200 p-5 rounded-3xl"><p class="text-[9px] font-black text-amber-600 uppercase mb-1 tracking-widest">Warmup Phase</p><p class="text-xs font-bold text-amber-900 leading-tight">${r.warmup}</p></div>
+                    <div class="bg-amber-100 border border-amber-200 p-5 rounded-3xl"><p class="text-[9px] font-black text-amber-600 uppercase mb-1">Warmup Phase</p><p class="text-xs font-bold text-amber-900">${r.warmup}</p></div>
                     <div class="space-y-10">
-                        ${r.exs.map(ex => `<div class="card-pro overflow-hidden p-2"><div class="gif-container"><img src="${ex.g}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x300?text=Caricamento...'"> <div class="absolute top-4 right-4 bg-white/90 px-4 py-2 rounded-2xl shadow-lg"><input type="number" onchange="state.weights['${ex.id}']=this.value; save()" class="w-12 text-center font-black text-indigo-700 text-sm" value="${state.weights[ex.id]||''}" placeholder="KG"></div></div><div class="p-5"><div class="flex justify-between items-center mb-3"><div><h4 class="font-black text-slate-800 text-sm uppercase leading-tight">${ex.n}</h4><span class="text-indigo-600 text-[10px] font-black uppercase">${ex.s}</span></div><span class="text-slate-300 text-[8px] font-black uppercase">${ex.t}</span></div><div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 relative"><div class="absolute -top-2 left-4 bg-white px-2 text-[8px] font-black text-indigo-400 uppercase leading-none">Coach Tip</div><p class="text-[10px] text-slate-500 font-bold leading-relaxed">${ex.e}</p></div></div></div>`).join('')}
+                        ${r.exs.map(ex => `<div class="card-pro overflow-hidden p-2"><div class="gif-container"><img src="${ex.g}" loading="lazy" referrerpolicy="no-referrer"> <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-2xl shadow-lg"><input type="number" onchange="state.weights['${ex.id}']=this.value; save()" class="w-12 text-center font-black text-indigo-700 text-sm" value="${state.weights[ex.id]||''}" placeholder="KG"></div></div><div class="p-5"><div class="flex justify-between items-center mb-3"><div><h4 class="font-black text-slate-800 text-sm uppercase leading-tight">${ex.n}</h4><span class="text-indigo-600 text-[10px] font-black uppercase">${ex.s}</span></div><span class="text-slate-300 text-[8px] font-black uppercase">${ex.t}</span></div><div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 relative"><div class="absolute -top-2 left-4 bg-white px-2 text-[8px] font-black text-indigo-400 uppercase leading-none">Coach Tip</div><p class="text-[10px] text-slate-500 font-bold leading-relaxed">${ex.e}</p></div></div></div>`).join('')}
                     </div>
-                    <div class="bg-slate-900 p-8 rounded-[3rem] text-center text-white shadow-2xl"><p class="text-[9px] font-black text-indigo-400 uppercase mb-2 tracking-widest italic leading-none">Addominali V-Shape</p><p class="text-xs font-black italic">"${r.abs}"</p></div>
+                    <div class="bg-slate-900 p-8 rounded-[3rem] text-center text-white shadow-2xl"><p class="text-[9px] font-black text-indigo-400 uppercase mb-2 tracking-widest italic">Addominali V-Shape</p><p class="text-xs font-black italic">"${r.abs}"</p></div>
                 `;
             } else if (state.tab === 'diet') {
-                html += `<div class="bg-emerald-600 p-8 rounded-[3rem] text-white shadow-xl text-center"><p class="text-[10px] font-black opacity-70 uppercase italic leading-none mb-1">Fuel Target</p><h2 class="text-4xl font-black italic">2400 <span class="text-xl font-normal opacity-60">Kcal</span></h2></div>${state.diet.map(m => `<div class="bg-white p-7 rounded-[3rem] border shadow-sm mb-6"><h4 class="text-[11px] font-black text-slate-300 uppercase tracking-widest mb-5 border-b pb-2 leading-none">${m.t}</h4><div class="space-y-4">${m.v.map(v => `<div class="p-5 bg-slate-50 rounded-[2.5rem] border relative overflow-hidden"><div class="absolute top-0 left-0 w-1.5 h-full bg-emerald-300"></div><p class="text-xs font-black text-slate-700 mb-3 leading-snug">${v.d}</p><div class="flex gap-3"><span class="text-[9px] font-black bg-emerald-100 text-emerald-700 px-3 py-1.5 rounded-xl uppercase">${v.k} KCAL</span><span class="text-[9px] font-black bg-indigo-100 text-indigo-700 px-3 py-1.5 rounded-xl uppercase">P: ${v.p}G</span></div></div>`).join('')}</div></div>`).join('')}`;
+                html += `<div class="bg-emerald-600 p-8 rounded-[3rem] text-white shadow-xl text-center"><p class="text-[10px] font-black opacity-70 uppercase italic mb-1">Fuel Target</p><h2 class="text-4xl font-black italic">2400 <span class="text-xl font-normal opacity-60">Kcal</span></h2></div>${state.diet.map(m => `<div class="bg-white p-7 rounded-[3rem] border shadow-sm mb-6"><h4 class="text-[11px] font-black text-slate-300 uppercase tracking-widest mb-5 border-b pb-2">${m.t}</h4><div class="space-y-4">${m.v.map(v => `<div class="p-5 bg-slate-50 rounded-[2.5rem] border relative overflow-hidden"><div class="absolute top-0 left-0 w-1.5 h-full bg-emerald-300"></div><p class="text-xs font-black text-slate-700 mb-3 leading-snug">${v.d}</p><div class="flex gap-3"><span class="text-[9px] font-black bg-emerald-100 text-emerald-700 px-3 py-1.5 rounded-xl uppercase">${v.k} KCAL</span><span class="text-[9px] font-black bg-indigo-100 text-indigo-700 px-3 py-1.5 rounded-xl uppercase">P: ${v.p}G</span></div></div>`).join('')}</div></div>`).join('')}`;
             } else if (state.tab === 'plan') {
-                html += `<div class="bg-white p-6 rounded-[2.5rem] shadow-sm border mb-6 text-center"><input type="date" value="${state.selectedDate}" onchange="state.selectedDate=this.value; save()" class="font-black text-indigo-600 uppercase text-lg"></div><div class="bg-white p-8 rounded-[3rem] shadow-sm border"><h4 class="text-[10px] font-black text-slate-300 uppercase mb-6 italic leading-none">Task List Giornaliera</h4><div class="space-y-4">${state.tasks[date].map((t, idx) => `<div class="flex items-center gap-4 group"><input type="checkbox" ${t.done?'checked':''} onclick="state.tasks['${date}'][${idx}].done=!state.tasks['${date}'][${idx}].done; save()" class="w-6 h-6 rounded-full accent-indigo-600 transition-all"><span class="flex-1 text-xs font-bold ${t.done?'line-through text-slate-300':'text-slate-700'} uppercase leading-none">${t.txt}</span><button onclick="state.tasks['${date}'].splice(${idx},1); save()" class="text-red-300 opacity-0 group-hover:opacity-100">×</button></div>`).join('')}<div class="mt-8 flex gap-2"><input id="newTask" type="text" placeholder="Aggiungi task..." class="flex-1 bg-slate-100 rounded-xl px-4 py-3 text-xs font-bold"><button onclick="addTask()" class="bg-indigo-600 text-white p-3 rounded-xl">+</button></div></div></div>`;
+                html += `<div class="bg-white p-6 rounded-[2.5rem] shadow-sm border mb-6 text-center"><input type="date" value="${state.selectedDate}" onchange="state.selectedDate=this.value; save()" class="font-black text-indigo-600 uppercase text-lg"></div><div class="bg-white p-8 rounded-[3rem] shadow-sm border"><h4 class="text-[10px] font-black text-slate-300 uppercase mb-6 italic">Daily Tasks</h4><div class="space-y-4">${state.tasks[date].map((t, idx) => `<div class="flex items-center gap-4 group"><input type="checkbox" ${t.done?'checked':''} onclick="state.tasks['${date}'][${idx}].done=!state.tasks['${date}'][${idx}].done; save()" class="w-6 h-6 rounded-full accent-indigo-600 transition-all"><span class="flex-1 text-xs font-bold ${t.done?'line-through text-slate-300':'text-slate-700'} uppercase leading-none">${t.txt}</span><button onclick="state.tasks['${date}'].splice(${idx},1); save()" class="text-red-300 group-hover:opacity-100">×</button></div>`).join('')}<div class="mt-8 flex gap-2"><input id="newTask" type="text" placeholder="Aggiungi task..." class="flex-1 bg-slate-100 rounded-xl px-4 py-3 text-xs font-bold"><button onclick="addTask()" class="bg-indigo-600 text-white p-3 rounded-xl">+</button></div></div></div>`;
             } else if (state.tab === 'water') {
-                html += `<div class="bg-blue-500 p-12 rounded-[3.5rem] text-white shadow-xl text-center flex flex-col items-center"><p class="text-[10px] font-black opacity-70 uppercase tracking-widest mb-2 font-bold italic">Hydration Tracker</p><h2 class="text-5xl font-black italic tracking-tighter leading-none">${(state.water[date]*0.25).toFixed(2)}L</h2><div class="mt-8 flex gap-4"><button onclick="state.water['${date}']=0; save()" class="bg-white/10 px-6 py-2 rounded-full text-[10px] font-bold uppercase">Reset</button><button onclick="state.water['${date}']++; save()" class="bg-white p-6 rounded-full text-blue-500 shadow-xl">${icons.water}</button></div></div>`;
+                html += `<div class="bg-blue-500 p-12 rounded-[3.5rem] text-white shadow-xl text-center flex flex-col items-center"><p class="text-[10px] font-black opacity-70 uppercase tracking-widest mb-2 font-bold italic">Hydration</p><h2 class="text-5xl font-black italic tracking-tighter leading-none">${(state.water[date]*0.25).toFixed(2)}L</h2><div class="mt-8 flex gap-4"><button onclick="state.water['${date}']=0; save()" class="bg-white/10 px-6 py-2 rounded-full text-[10px] font-bold uppercase">Reset</button><button onclick="state.water['${date}']++; save()" class="bg-white p-6 rounded-full text-blue-500 shadow-xl">${icons.water}</button></div></div>`;
             } else if (state.tab === 'flex') {
                 html += `
                     <div class="bg-indigo-900 p-8 rounded-[3rem] text-white shadow-xl text-center mb-6">
-                        <p class="text-[10px] font-black opacity-50 uppercase tracking-widest mb-1 italic leading-none">Vademecum Mobilità & Postura</p>
-                        <h2 class="text-2xl font-black italic uppercase leading-tight">7 Essential Stretches</h2>
+                        <p class="text-[10px] font-black opacity-50 uppercase tracking-widest mb-1 italic leading-none">Vademecum Mobilità</p>
+                        <h2 class="text-2xl font-black italic uppercase">7 Essential Stretches</h2>
                     </div>
-
-                    <div class="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm mb-6 space-y-4">
+                    <div class="bg-white p-6 rounded-[2.5rem] border mb-6 space-y-4 shadow-sm">
                         <div class="p-4 bg-indigo-50 rounded-2xl">
-                            <h4 class="text-[10px] font-black text-indigo-700 uppercase mb-2 leading-none tracking-widest italic">Guida Tecnica</h4>
-                            <p class="text-[10px] text-slate-600 font-bold leading-relaxed">• Frequenza: 3-5x/settimana (Quotidiana se lavori al PC)<br>• Durata: 15-25 sec per stretch<br>• Round: 2-3 per movimento<br>• Focus: Non forzare, respira profondamente.</p>
-                        </div>
-                        <div class="p-4 bg-amber-50 rounded-2xl border border-amber-100">
-                            <h4 class="text-[10px] font-black text-amber-700 uppercase mb-2 leading-none tracking-widest italic">Evita questi errori</h4>
-                            <p class="text-[10px] text-amber-900 font-bold leading-relaxed">1. Forzare oltre il comfort<br>2. Trattenere il respiro<br>3. Collassare con la schiena</p>
+                            <h4 class="text-[10px] font-black text-indigo-700 uppercase mb-1">Guida Tecnica</h4>
+                            <p class="text-[10px] text-slate-600 font-bold leading-relaxed">• Durata: 15-25 sec per stretch<br>• Round: 2-3 per movimento<br>• Focus: Respira profondamente.</p>
                         </div>
                     </div>
-
                     <div class="space-y-10">
                         ${state.stretches.map(st => `
                             <div class="card-pro overflow-hidden p-2">
-                                <div class="gif-container"><img src="${st.g}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x300?text=Caricamento...'"></div>
+                                <div class="gif-container"><img src="${st.g}" loading="lazy" referrerpolicy="no-referrer" onerror="this.src='https://via.placeholder.com/400x300?text=Reloading...'"></div>
                                 <div class="p-5">
                                     <div class="flex justify-between items-center mb-3 leading-none">
                                         <h4 class="font-black text-slate-800 text-sm uppercase leading-tight">${st.n}</h4>
                                         <span class="bg-indigo-50 text-indigo-400 text-[8px] px-2 py-1 rounded-lg font-black uppercase tracking-tighter leading-none">${st.t}</span>
                                     </div>
-                                    <p class="text-[10px] text-slate-500 font-bold leading-relaxed bg-slate-50 p-4 rounded-2xl border border-slate-100 italic">Beneficio: ${st.b}</p>
+                                    <p class="text-[10px] text-slate-500 font-bold leading-relaxed bg-slate-50 p-4 rounded-2xl border italic">Beneficio: ${st.b}</p>
                                 </div>
                             </div>
                         `).join('')}
