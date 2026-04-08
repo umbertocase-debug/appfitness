@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Aesthetic Master v12</title>
+    <title>Aesthetic Master v13</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -12,7 +12,6 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         input[type="number"] { -webkit-appearance: none; margin: 0; outline: none; border: none; }
         .tab-active { background: #4f46e5; color: white; box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4); }
-        /* Box GIF aumentato e fix per immagini intere */
         .gif-container { background: #ffffff; border-radius: 1.5rem; overflow: hidden; height: 240px; position: relative; border: 1px solid #f1f5f9; }
         .gif-container img { width: 100%; height: 100%; object-fit: contain; }
         .card-glow { box-shadow: 0 10px 30px -5px rgba(79, 70, 229, 0.1); }
@@ -22,7 +21,7 @@
     <div id="app"></div>
 
     <script>
-        // --- CONFIGURAZIONE DATABASE COMPLETO V12 ---
+        // --- DATABASE AGGIORNATO V13 ---
         const defaultData = {
             routine: 'A', tab: 'workout', isEdit: false,
             workout: {
@@ -32,28 +31,28 @@
                     warmup: "7' Tapis (Pendenza 5%) + Mobilità Spalle + 2 serie leggere del primo esercizio.",
                     abs: "Leg Raises 3x15 (Arrotola il bacino verso l alto) + Plank 3x60s (Spremi glutei e addome).",
                     exs: [
-                        { id: 'a1', n: 'Lento Avanti Manubri', s: '3x8-10', t: 'Spalle Anteriori', e: 'Siediti dritto. Scendi coi manubri fin sotto le orecchie. Spingi verso l alto senza far toccare i pesi. NON inarcare eccessivamente la schiena.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Dumbbell-Shoulder-Press.gif' },
-                        { id: 'a2', n: 'Lat Machine Pr. Larga', s: '3x10', t: 'V-Taper Spessore', e: 'Tira la sbarra al petto. Immagina di guidare il movimento con i GOMITI, non con le mani. Strizza le scapole in fondo.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Lat-Pulldown.gif' },
-                        { id: 'a3', n: 'Panca Piana Manubri', s: '3x10', t: 'Massa Petto', e: 'Scendi lentamente sentendo lo stretch. In risalita, strizza il petto come se volessi unire i bicipiti. Piedi ben piantati.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Dumbbell-Press.gif' },
-                        { id: 'a4', n: 'SS: Curl Bilanciere EZ', s: '4x10', t: 'Bicipiti Massa', e: 'Gomiti incollati ai fianchi. NON oscillare con la schiena. Spremi il bicipite nel punto più alto del movimento.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Z-Bar-Curl.gif' },
-                        { id: 'a5', n: 'SS: French Press EZ', s: '4x10', t: 'Tricipiti Spessore', e: 'Porta il bilanciere verso la fronte. Tieni i gomiti stretti e fermi nello spazio. Estendi completamente il braccio.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/ez-bar-lying-triceps-extension.gif' },
-                        { id: 'a6', n: 'Alzate Laterali', s: '3x15', t: 'Larghezza Spalle', e: 'Mignolo leggermente verso l alto. Non superare la linea spalle. Movimento a pendolo controllato, NO slanci.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Dumbbell-Lateral-Raise.gif' },
-                        { id: 'a7', n: 'Facepull ai Cavi', s: '3x12', t: 'Dettaglio Posteriore', e: 'Tira la corda verso la fronte aprendola verso l esterno. Fondamentale per spalle tonde e postura da ufficio.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Face-Pull.gif' }
+                        { id: 'a1', n: 'Lento Avanti Manubri', s: '3x8-10', t: 'Spalle Anteriori', e: 'Siediti dritto. Scendi coi manubri fin sotto le orecchie. Spingi verso l alto senza far toccare i pesi.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Dumbbell-Shoulder-Press.gif' },
+                        { id: 'a2', n: 'Lat Machine Pr. Larga', s: '3x10', t: 'V-Taper Spessore', e: 'Guida con i GOMITI, non con le mani. Strizza le scapole in fondo.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Lat-Pulldown.gif' },
+                        { id: 'a3', n: 'Panca Piana Manubri', s: '3x10', t: 'Massa Petto', e: 'Scendi lentamente. In risalita strizza il petto come se volessi unire i bicipiti.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Dumbbell-Press.gif' },
+                        { id: 'a4', n: 'SS: Curl Bilanciere EZ', s: '4x10', t: 'Bicipiti Massa', e: 'Gomiti incollati ai fianchi. Spremi il bicipite in alto.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Z-Bar-Curl.gif' },
+                        { id: 'a5', n: 'SS: French Press EZ', s: '4x10', t: 'Tricipiti Spessore', e: 'Porta il bilanciere verso la fronte. Tieni i gomiti stretti.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/ez-bar-lying-triceps-extension.gif' },
+                        { id: 'a6', n: 'Alzate Laterali', s: '3x15', t: 'Larghezza Spalle', e: 'Mignolo leggermente verso l alto. Movimento controllato.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Dumbbell-Lateral-Raise.gif' },
+                        { id: 'a7', n: 'Facepull ai Cavi', s: '3x12', t: 'Dettaglio Posteriore', e: 'Tira verso la fronte aprendo la corda verso l esterno.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Face-Pull.gif' }
                     ]
                 },
                 B: {
                     name: "Routine B: Width & Definition",
                     concept: "Focus sull ampiezza laterale (V-Shape) e isolamento delle braccia. Tensione costante per scolpire i dettagli estetici.",
-                    warmup: "7' Tapis + Mobilità cuffia rotatori con elastico o pesetti leggeri.",
-                    abs: "Woodchopper Cavi 3x15 (Taglia legna diagonale) + Bicycle Crunch 3x20 (Gomito-Ginocchio opposto).",
+                    warmup: "7' Tapis + Mobilità cuffia rotatori con elastico.",
+                    abs: "Woodchopper Cavi 3x15 + Bicycle Crunch 3x20.",
                     exs: [
-                        { id: 'b1', n: 'Trazioni o Lat Stretta', s: '3xMax/10', t: 'Ampiezza Dorsale', e: 'Cerca il massimo allungamento in alto. Tira portando il petto verso la sbarra. Fondamentale per allargare la schiena.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Pull-up.gif' },
-                        { id: 'b2', n: 'Panca Inclinata Man.', s: '3x10', t: 'Focus Petto Alto', e: 'Inclinazione panca 30 gradi. Spingi verso l alto e l interno. Crea il look pieno sotto le clavicole.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Incline-Dumbbell-Press.gif' },
-                        { id: 'b3', n: 'Alzate Laterali Cavi', s: '3x12', t: 'Tensione Spalle', e: 'Cavo basso. Passa il braccio dietro la schiena per lo stretch. Non sollevare la scapola, isola il deltoide.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Cable-Lateral-Raise.gif' },
-                        { id: 'b4', n: 'SS: Hammer Curl', s: '4x12', t: 'Spessore Brachiale', e: 'Presa a martello (palmi che si guardano). Allarga il braccio lateralmente. Fondamentale per la circonferenza.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/dumbbell-hammer-curl.gif' },
-                        { id: 'b5', n: 'SS: Pushdown Corda', s: '4x12', t: 'Dettaglio Tricipiti', e: 'Gomiti bloccati. In fondo al movimento APRI la corda verso l esterno. Strizza il tricipite per 1 secondo.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/rope-pushdown.gif' },
-                        { id: 'b6', n: 'Curl Panca Inc. 45°', s: '2x12', t: 'Picco Bicipite', e: 'Lascia cadere le braccia dietro il busto. Massimo stretch. Non muovere i gomiti durante il curl.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/incline-dumbbell-curl.gif' },
-                        { id: 'b7', n: 'Dips Panche/Parall.', s: '3xMax', t: 'Finisher Braccia', e: 'Gomiti stretti per focus tricipiti. Scendi finchè l omero è parallelo al suolo e risali esplosivo.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Bench-Dips.gif' }
+                        { id: 'b1', n: 'Trazioni o Lat Stretta', s: '3xMax/10', t: 'Ampiezza Dorsale', e: 'Massimo allungamento in alto. Petto verso la sbarra.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Pull-up.gif' },
+                        { id: 'b2', n: 'Panca Inclinata Man.', s: '3x10', t: 'Focus Petto Alto', e: 'Inclinazione 30 gradi. Look pieno sotto le clavicole.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Incline-Dumbbell-Press.gif' },
+                        { id: 'b3', n: 'Alzate Laterali Cavi', s: '3x12', t: 'Tensione Spalle', e: 'Passa il braccio dietro la schiena. Isola il deltoide.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Cable-Lateral-Raise.gif' },
+                        { id: 'b4', n: 'SS: Hammer Curl', s: '4x12', t: 'Spessore Brachiale', e: 'Presa a martello. Allarga il braccio lateralmente.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/dumbbell-hammer-curl.gif' },
+                        { id: 'b5', n: 'SS: Pushdown Corda', s: '4x12', t: 'Dettaglio Tricipiti', e: 'In fondo APRI la corda. Strizza per 1 secondo.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/rope-pushdown.gif' },
+                        { id: 'b6', n: 'Curl Panca Inc. 45°', s: '2x12', t: 'Picco Bicipite', e: 'Braccia dietro il busto. Massimo stretch.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/incline-dumbbell-curl.gif' },
+                        { id: 'b7', n: 'Dips Panche/Parall.', s: '3xMax', t: 'Finisher Braccia', e: 'Gomiti stretti. Scendi finchè l omero è parallelo.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Bench-Dips.gif' }
                     ]
                 }
             },
@@ -62,33 +61,53 @@
                 { t: "Colazione", v: [
                     { d: "80g Avena + 150g Albume + 1 Uovo + 50g Mirtilli", k: 515, p: 32 },
                     { d: "250g Yogurt Greco (2%) + 50g Granola + 20g Noci", k: 490, p: 30 },
-                    { d: "80g Pane integrale + 100g Bresaola + 50g Avocado", k: 510, p: 35 }
+                    { d: "80g Pane integrale + 100g Bresaola + 50g Avocado", k: 510, p: 35 },
+                    { d: "Pancake proteico (Supermercato) + 1 Mela + Burro arachidi (15g)", k: 480, p: 25 },
+                    { d: "Shake: 30g Proteine Whey + 1 Banana + 40g Farina Avena", k: 500, p: 30 },
+                    { d: "Bar: Omelette 3 albumi/1 uovo + 2 fette pane tostato (Ristorante)", k: 450, p: 28 }
                 ]},
                 { t: "Pranzo", v: [
                     { d: "100g Riso Basmati + 150g Pollo + 200g Zucchine + 15g Olio EVO", k: 690, p: 40 },
                     { d: "100g Pasta integrale + 150g Manzo magro + 10g Olio EVO", k: 720, p: 38 },
-                    { d: "100g Quinoa + 150g Tonno (nat.) + 200g Verdure + 15g Olio EVO", k: 660, p: 39 }
+                    { d: "Piadina integrale + 100g Bresaola + Rucola + 50g Formaggio light (Piadineria)", k: 650, p: 35 },
+                    { d: "Poke Media: Riso + Pollo/Tonno + Edamame + Avocado + Mango (Fuori)", k: 700, p: 35 },
+                    { d: "Piatto pronto Microonde: Pollo e Riso o Pasta al sugo (Supermercato)", k: 600, p: 30 },
+                    { d: "Insalatona Ristorante: Tonno + 2 Uova sode + Pane (80g) + Olio", k: 620, p: 32 }
                 ]},
                 { t: "Spuntino", v: [
                     { d: "1 Barretta Proteica (60g) + 1 Mela (150g)", k: 285, p: 20 },
                     { d: "40g Parmigiano Reggiano + 1 Pera (150g)", k: 260, p: 13 },
-                    { d: "170g Skyr Bianco + 20g Mandorle", k: 275, p: 22 }
+                    { d: "170g Skyr Bianco + 20g Mandorle", k: 275, p: 22 },
+                    { d: "Budino Proteico (Supermercato) + 1 manciata noci", k: 250, p: 20 },
+                    { d: "Bresaola snack (50g) + 1 pacchetto cracker integrali", k: 240, p: 18 },
+                    { d: "Shake Proteine Whey (30g) in acqua + 1 frutto", k: 220, p: 25 }
                 ]},
                 { t: "Cena", v: [
                     { d: "150g Salmone + 250g Patate + 200g Asparagi + 5g Olio EVO", k: 650, p: 36 },
                     { d: "200g Orata + 80g Couscous + 200g Broccoli + 15g Olio EVO", k: 620, p: 42 },
-                    { d: "150g Tacchino + 80g Pane integrale + Insalata + 15g Olio EVO", k: 600, p: 38 }
+                    { d: "Hamburger di Tacchino (200g) + Panino integrale + Verdure", k: 580, p: 35 },
+                    { d: "Sushi: 10/12 pezzi mix Sashimi e Nigiri (Ristorante)", k: 650, p: 30 },
+                    { d: "Pollo allo spiedo (senza pelle) + Patate al forno (Porzione bar/deli)", k: 680, p: 40 },
+                    { d: "Zuppa di Legumi pronta + 2 fette pane + 100g Fesa Tacchino", k: 550, p: 32 }
                 ]}
+            ],
+            supps: [
+                { n: "Creatina Monoidrato", q: "5g al giorno", t: "Sempre, anche quando non ti alleni. Versala in acqua o succo." },
+                { n: "Proteine Whey", q: "30g (1 scoop)", t: "Post-workout o quando non riesci a fare uno spuntino solido." },
+                { n: "Multivitaminico", q: "1 compressa", t: "Al mattino con la colazione per il benessere generale." },
+                { n: "Omega 3", q: "2 capsule", t: "A cena. Aiuta contro le infiammazioni articolari da ufficio/pesi." }
             ]
         };
 
-        // --- ENGINE ---
-        let state = JSON.parse(localStorage.getItem('aesthetic_v12')) || defaultData;
-        function save() { localStorage.setItem('aesthetic_v12', JSON.stringify(state)); render(); }
+        let state = JSON.parse(localStorage.getItem('aesthetic_v13')) || defaultData;
+        function save() { localStorage.setItem('aesthetic_v13', JSON.stringify(state)); render(); }
 
-        const iconGym = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5 3 10l3.5 3.5m11-7L21 10l-3.5 3.5"/><path d="m18 7-11 10"/><path d="m14 7 3.5 3.5-3.5 3.5"/><path d="m6.5 6.5 3.5 3.5-3.5 3.5"/></svg>`;
-        const iconFood = `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>`;
-        const iconEdit = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`;
+        const icons = {
+            gym: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5 3 10l3.5 3.5m11-7L21 10l-3.5 3.5"/><path d="m18 7-11 10"/><path d="m14 7 3.5 3.5-3.5 3.5"/><path d="m6.5 6.5 3.5 3.5-3.5 3.5"/></svg>`,
+            food: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>`,
+            edit: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`,
+            zap: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-500"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`
+        };
 
         function render() {
             const app = document.getElementById('app');
@@ -97,11 +116,11 @@
             let html = `
                 <header class="bg-indigo-800 p-6 text-white rounded-b-[2.5rem] shadow-2xl sticky top-0 z-50 flex justify-between items-center border-b border-white/10">
                     <div>
-                        <h1 class="text-2xl font-black italic tracking-tighter uppercase leading-none">Umberto Case</h1>
-                        <p class="text-[9px] font-bold opacity-60 uppercase tracking-[0.2em] mt-1 italic">Piano personalizzato</p>
+                        <h1 class="text-2xl font-black italic tracking-tighter uppercase leading-none">AESTHETIC V13</h1>
+                        <p class="text-[9px] font-bold opacity-60 uppercase tracking-[0.2em] mt-1 italic">Visual & Macro Guide</p>
                     </div>
                     <button onclick="state.isEdit = !state.isEdit; save()" class="p-3 rounded-full ${state.isEdit ? 'bg-amber-400 rotate-90 shadow-lg' : 'bg-white/10'} transition-all">
-                        ${iconEdit}
+                        ${icons.edit}
                     </button>
                 </header>
                 <main class="p-4 max-w-md mx-auto space-y-6">
@@ -110,25 +129,22 @@
             if (state.tab === 'workout') {
                 html += `
                     <div class="flex bg-white p-1.5 rounded-2xl shadow-inner border border-slate-200">
-                        <button onclick="state.routine='A'; save()" class="flex-1 py-3 rounded-xl font-bold text-xs ${state.routine === 'A' ? 'tab-active' : 'text-slate-400'}">ROUTINE A</button>
-                        <button onclick="state.routine='B'; save()" class="flex-1 py-3 rounded-xl font-bold text-xs ${state.routine === 'B' ? 'tab-active' : 'text-slate-400'}">ROUTINE B</button>
+                        <button onclick="state.routine='A'; save()" class="flex-1 py-3 rounded-xl font-bold text-xs ${state.routine === 'A' ? 'tab-active' : 'text-slate-400'} uppercase">ROUTINE A</button>
+                        <button onclick="state.routine='B'; save()" class="flex-1 py-3 rounded-xl font-bold text-xs ${state.routine === 'B' ? 'tab-active' : 'text-slate-400'} uppercase">ROUTINE B</button>
                     </div>
-
                     <div class="bg-indigo-700 p-6 rounded-[2.5rem] text-white shadow-xl relative overflow-hidden">
-                        <p class="text-[10px] font-black opacity-40 uppercase tracking-widest mb-1 italic">The Concept</p>
-                        ${state.isEdit ? `<textarea onchange="state.workout['${state.routine}'].concept=this.value; save()" class="w-full bg-white/10 p-2 text-xs text-white border-none rounded">${r.concept}</textarea>` : `<p class="text-xs font-bold leading-relaxed italic pr-6">"${r.concept}"</p>`}
+                        <p class="text-[10px] font-black opacity-40 uppercase tracking-widest mb-1 italic">Concept</p>
+                        <p class="text-xs font-bold leading-relaxed italic pr-6">"${r.concept}"</p>
                     </div>
-
                     <div class="bg-amber-50 border border-amber-200 p-5 rounded-3xl flex items-center gap-3">
                         <div class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></div>
-                        ${state.isEdit ? `<input onchange="state.workout['${state.routine}'].warmup=this.value; save()" class="w-full text-xs p-1" value="${r.warmup}">` : `<p class="text-xs font-black text-amber-900 leading-tight uppercase tracking-tight">${r.warmup}</p>`}
+                        <p class="text-xs font-black text-amber-900 uppercase tracking-tight">${r.warmup}</p>
                     </div>
-
                     <div class="space-y-10">
                         ${r.exs.map(ex => `
                             <div class="bg-white p-2 rounded-[2.5rem] border border-slate-100 card-glow overflow-hidden">
                                 <div class="gif-container">
-                                    <img src="${ex.g}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x300?text=Caricamento...'">
+                                    <img src="${ex.g}" loading="lazy">
                                     <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-3 py-2 rounded-2xl shadow-lg">
                                         <input type="number" onchange="state.weights['${ex.id}']=this.value; save()" 
                                                class="w-12 text-center font-black text-indigo-700 bg-transparent text-sm" 
@@ -144,31 +160,42 @@
                                         <span class="bg-indigo-50 text-indigo-400 text-[8px] px-2 py-1 rounded-lg font-black uppercase tracking-tighter">${ex.t}</span>
                                     </div>
                                     <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 relative">
-                                        <div class="absolute -top-2 left-4 bg-white px-2 border border-slate-100 text-[8px] font-black text-indigo-400 uppercase">Coach Execution & Tips</div>
+                                        <div class="absolute -top-2 left-4 bg-white px-2 border border-slate-100 text-[8px] font-black text-indigo-400 uppercase">Coach Tip</div>
                                         <p class="text-[10px] text-slate-500 font-bold leading-relaxed">${ex.e}</p>
                                     </div>
-                                    ${state.isEdit ? `<input onchange="editEx('${ex.id}', 'g', this.value)" class="w-full text-[8px] mt-2 p-1 border rounded" value="${ex.g}">` : ''}
                                 </div>
                             </div>
                         `).join('')}
                     </div>
-
-                    <div class="bg-slate-900 p-8 rounded-[3rem] shadow-2xl relative overflow-hidden">
-                        <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16"></div>
-                        <p class="text-[9px] font-black text-indigo-400 uppercase mb-2 tracking-[0.3em] text-center italic">V-Shape Mastery</p>
-                        ${state.isEdit ? `<input onchange="state.workout['${state.routine}'].abs=this.value; save()" class="w-full text-xs p-2 rounded bg-slate-800 text-white" value="${r.abs}">` : `<p class="text-xs font-black text-white text-center leading-relaxed italic">"${r.abs}"</p>`}
+                    <div class="bg-slate-900 p-8 rounded-[3rem] shadow-2xl text-center">
+                        <p class="text-[9px] font-black text-indigo-400 uppercase mb-2 tracking-[0.3em] italic">V-Shape Mastery</p>
+                        <p class="text-xs font-black text-white leading-relaxed italic">"${r.abs}"</p>
                     </div>
                 `;
             } else {
                 html += `
-                    <div class="bg-emerald-600 p-8 rounded-[3rem] text-white shadow-2xl text-center relative overflow-hidden">
-                        <p class="text-[10px] font-black opacity-70 tracking-[0.2em] mb-1 uppercase font-bold italic">Nutrizione Strategica</p>
+                    <div class="bg-emerald-600 p-8 rounded-[3rem] text-white shadow-2xl text-center">
+                        <p class="text-[10px] font-black opacity-70 tracking-[0.2em] mb-1 uppercase italic">Nutrizione & Integrazione</p>
                         <h2 class="text-4xl font-black italic tracking-tighter uppercase leading-none">2400 <span class="text-xl font-normal opacity-70">Kcal</span></h2>
-                        <div class="flex gap-4 mt-4 justify-center">
-                            <span class="text-[10px] font-black bg-white/20 px-4 py-1.5 rounded-full uppercase tracking-widest border border-white/10">Pro: 125g</span>
-                            <span class="text-[10px] font-black bg-white/20 px-4 py-1.5 rounded-full uppercase tracking-widest border border-white/10">Fat: 65g</span>
+                    </div>
+
+                    <div class="bg-white p-7 rounded-[3rem] border border-slate-100 shadow-sm">
+                        <div class="flex items-center gap-2 mb-4">
+                            <h4 class="text-[10px] font-black text-indigo-500 uppercase tracking-widest">Integrazione Consigliata</h4>
+                        </div>
+                        <div class="space-y-3">
+                            ${state.supps.map(s => `
+                                <div class="p-4 bg-indigo-50 rounded-2xl border border-indigo-100">
+                                    <div class="flex justify-between items-center mb-1">
+                                        <span class="font-black text-indigo-900 text-xs uppercase">${s.n}</span>
+                                        <span class="text-[9px] font-black bg-white px-2 py-0.5 rounded shadow-sm text-indigo-600 uppercase">${s.q}</span>
+                                    </div>
+                                    <p class="text-[9px] text-indigo-400 font-bold leading-tight uppercase italic">${s.t}</p>
+                                </div>
+                            `).join('')}
                         </div>
                     </div>
+
                     ${state.diet.map(m => `
                         <div class="bg-white p-7 rounded-[3rem] border border-slate-100 shadow-sm">
                             <h4 class="text-[11px] font-black text-slate-300 uppercase tracking-widest mb-5 border-b border-slate-50 pb-2">${m.t}</h4>
@@ -199,10 +226,10 @@
                 </main>
                 <nav class="fixed bottom-8 left-8 right-8 bg-white/95 backdrop-blur-xl border border-slate-200 h-20 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.1)] flex justify-around items-center px-4 z-[100]">
                     <button onclick="state.tab='workout'; save()" class="flex-1 flex flex-col items-center ${state.tab === 'workout' ? 'text-indigo-600 scale-110' : 'text-slate-300'}">
-                        ${iconGym} <span class="text-[9px] font-black uppercase tracking-tighter mt-1">Power</span>
+                        ${icons.gym} <span class="text-[9px] font-black uppercase mt-1">Power</span>
                     </button>
                     <button onclick="state.tab='diet'; save()" class="flex-1 flex flex-col items-center ${state.tab === 'diet' ? 'text-emerald-600 scale-110' : 'text-slate-300'}">
-                        ${iconFood} <span class="text-[9px] font-black uppercase tracking-tighter mt-1">Fuel</span>
+                        ${icons.food} <span class="text-[9px] font-black uppercase mt-1">Fuel</span>
                     </button>
                 </nav>
             `;
