@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Aesthetic Master OS v16</title>
+    <title>Aesthetic Master OS v17</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -21,7 +21,7 @@
     <div id="app"></div>
 
     <script>
-        // --- DATABASE AGGIORNATO V16 ---
+        // --- DATABASE AGGIORNATO V17 CON NUOVE GIF STRETCHING ---
         const initialData = {
             tab: 'gym',
             routine: 'A',
@@ -68,7 +68,7 @@
                     { d: "80g Pane integrale + 100g Bresaola + 50g Avocado", k: 510, p: 35 },
                     { d: "Pancake proteico + 1 Mela + 15g Burro arachidi", k: 480, p: 25 },
                     { d: "Shake: 30g Whey + 1 Banana + 40g Farina Avena", k: 500, p: 30 },
-                    { d: "Bar: Omelette 3 albumi/1 uovo + 2 fette pane tostato", k: 450, p: 28 }
+                    { d: "Omelette 3 albumi/1 uovo + 2 fette pane tostato", k: 450, p: 28 }
                 ]},
                 { t: "Pranzo", v: [
                     { d: "100g Riso Basmati + 150g Pollo + 200g Zucchine + 15g Olio EVO", k: 690, p: 40 },
@@ -90,16 +90,16 @@
                 ]}
             ],
             stretches: [
-                { n: "Pettorali al muro", t: "Petto / Spalle", b: "Apre il torace, corregge la postura da PC, allarga visivamente le spalle.", g: "https://www.fitnessprogramer.com/wp-content/uploads/2021/05/Chest-Stretch.gif" },
-                { n: "Stretching Dorsali", t: "Dorso (V-Shape)", b: "Allunga il gran dorsale, permettendo una miglior espansione della schiena a V.", g: "https://www.fitnessprogramer.com/wp-content/uploads/2023/10/Lats-Stretch.gif" },
-                { n: "Collo e Trapezio", t: "Collo / Ufficio", b: "Rilascia la tensione accumulata davanti allo schermo. Riduce il mal di testa.", g: "https://www.fitnessprogramer.com/wp-content/uploads/2021/07/Neck-Stretch.gif" },
-                { n: "Estensori Avambraccio", t: "Avambracci / Mouse", b: "Fondamentale per chi usa molto il mouse. Previene l epicondilite.", g: "https://www.fitnessprogramer.com/wp-content/uploads/2022/02/Wrist-Extensor-Stretch.gif" },
+                { n: "Pettorali al muro", t: "Petto / Spalle", b: "Apre il torace, corregge la postura da PC, allarga visivamente le spalle.", g: "https://www.fitnessprogramer.com/wp-content/uploads/2021/05/Doorway-Chest-Stretch.gif" },
+                { n: "Wall Lat Stretch", t: "Dorso (V-Shape)", b: "Allunga il gran dorsale, permettendo una miglior espansione della schiena a V.", g: "https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Wall-Lat-Stretch.gif" },
+                { n: "Neck Stretch", t: "Collo / Ufficio", b: "Rilascia la tensione accumulata davanti allo schermo. Riduce il mal di testa.", g: "https://www.fitnessprogramer.com/wp-content/uploads/2021/05/Neck-Stretch.gif" },
+                { n: "Wrist Stretch", t: "Avambracci / Mouse", b: "Fondamentale per chi usa molto il mouse. Previene l epicondilite.", g: "https://www.fitnessprogramer.com/wp-content/uploads/2022/02/Wrist-Extensor-Stretch.gif" },
                 { n: "Childs Pose", t: "Schiena Totale", b: "Decompressione vertebrale. Ottimo dopo una giornata seduti.", g: "https://www.fitnessprogramer.com/wp-content/uploads/2021/05/Childs-Pose.gif" }
             ]
         };
 
-        let state = JSON.parse(localStorage.getItem('aesthetic_v16')) || initialData;
-        function save() { localStorage.setItem('aesthetic_v16', JSON.stringify(state)); render(); }
+        let state = JSON.parse(localStorage.getItem('aesthetic_v17')) || initialData;
+        function save() { localStorage.setItem('aesthetic_v17', JSON.stringify(state)); render(); }
 
         const icons = {
             gym: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 12h12M6 8h12M6 16h12"/></svg>`,
@@ -120,7 +120,7 @@
                 <header class="bg-indigo-800 p-6 text-white rounded-b-[2.5rem] shadow-xl sticky top-0 z-50">
                     <div class="flex justify-between items-center">
                         <h1 class="text-xl font-black italic uppercase">Aesthetic Master OS</h1>
-                        <span class="text-[9px] font-bold bg-white/20 px-3 py-1 rounded-full uppercase italic">V16 FLEX</span>
+                        <span class="text-[9px] font-bold bg-white/20 px-3 py-1 rounded-full uppercase italic font-black tracking-widest">V17 FIXED</span>
                     </div>
                 </header>
                 <main class="p-4 max-w-md mx-auto space-y-6 pb-32">
@@ -137,7 +137,7 @@
                     <div class="space-y-10">
                         ${r.exs.map(ex => `
                             <div class="card-pro overflow-hidden p-2">
-                                <div class="gif-container"><img src="${ex.g}" loading="lazy"><div class="absolute top-4 right-4 bg-white/90 px-4 py-2 rounded-2xl shadow-lg"><input type="number" onchange="state.weights['${ex.id}']=this.value; save()" class="w-12 text-center font-black text-indigo-700 text-sm" value="${state.weights[ex.id]||''}" placeholder="KG"></div></div>
+                                <div class="gif-container"><img src="${ex.g}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x300?text=Caricamento...'"> <div class="absolute top-4 right-4 bg-white/90 px-4 py-2 rounded-2xl shadow-lg"><input type="number" onchange="state.weights['${ex.id}']=this.value; save()" class="w-12 text-center font-black text-indigo-700 text-sm" value="${state.weights[ex.id]||''}" placeholder="KG"></div></div>
                                 <div class="p-5"><div class="flex justify-between items-center mb-3"><div><h4 class="font-black text-slate-800 text-sm uppercase">${ex.n}</h4><span class="text-indigo-600 text-[10px] font-black uppercase">${ex.s}</span></div><span class="text-slate-300 text-[8px] font-black uppercase">${ex.t}</span></div>
                                 <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 relative"><div class="absolute -top-2 left-4 bg-white px-2 text-[8px] font-black text-indigo-400 uppercase">Coach Tip</div><p class="text-[10px] text-slate-500 font-bold leading-relaxed">${ex.e}</p></div></div>
                             </div>
@@ -168,7 +168,7 @@
                     <div class="space-y-10">
                         ${state.stretches.map(st => `
                             <div class="card-pro overflow-hidden p-2">
-                                <div class="gif-container"><img src="${st.g}" loading="lazy"></div>
+                                <div class="gif-container"><img src="${st.g}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x300?text=Caricamento...'"></div>
                                 <div class="p-5">
                                     <div class="flex justify-between items-center mb-2">
                                         <h4 class="font-black text-slate-800 text-sm uppercase">${st.n}</h4>
