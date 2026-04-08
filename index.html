@@ -3,175 +3,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Aesthetic OS v14</title>
+    <title>Aesthetic Master OS v15</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { -webkit-tap-highlight-color: transparent; font-family: -apple-system, system-ui, sans-serif; overflow-x: hidden; }
+        body { -webkit-tap-highlight-color: transparent; font-family: -apple-system, system-ui, sans-serif; background: #f8fafc; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        input[type="number"], input[type="text"] { -webkit-appearance: none; outline: none; border: none; }
-        .tab-active { color: #4f46e5; border-top: 3px solid #4f46e5; }
-        .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); }
-        .gif-container { background: #fff; border-radius: 1.5rem; overflow: hidden; height: 220px; border: 1px solid #f1f5f9; }
+        .tab-active { color: #4f46e5; border-bottom: 3px solid #4f46e5; }
+        .gif-container { background: #fff; border-radius: 1.5rem; overflow: hidden; height: 240px; border: 1px solid #f1f5f9; }
         .gif-container img { width: 100%; height: 100%; object-fit: contain; }
-        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        .animate-up { animation: slideUp 0.4s ease-out forwards; }
+        .card-pro { background: white; border-radius: 2rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px -2px rgba(0,0,0,0.05); }
+        input[type="number"], input[type="text"] { border: none; outline: none; background: transparent; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900">
+<body class="text-slate-900">
     <div id="app"></div>
 
     <script>
-        // --- DATABASE INIZIALE ---
+        // --- DATA ARCHIVE ---
         const initialData = {
-            routine: 'A', tab: 'power', isEdit: false,
-            water: 0,
-            checks: { workout: false, diet: false, supps: false },
-            tasks: [
-                { id: 1, txt: "Spalle aperte al PC", cat: "work", done: false },
-                { id: 2, txt: "Review Mail Mattina", cat: "work", done: false }
-            ],
+            tab: 'gym',
+            routine: 'A',
+            selectedDate: new Date().toISOString().split('T')[0],
+            water: {}, // { '2024-04-08': 0 }
+            tasks: {}, // { '2024-04-08': [{id, txt, done}] }
+            weights: {},
             workout: {
                 A: {
                     name: "Power & Thickness",
-                    concept: "Costruiamo spessore. Carichi pesanti per una base densa.",
-                    warmup: "7' Tapis (Pendenza 5%) + Mobilità Spalle",
-                    abs: "Leg Raises 3x15 + Plank 3x60s",
+                    concept: "Focus sullo spessore del busto e forza esplosiva. Usiamo carichi alti per creare una base densa e compatta.",
+                    warmup: "7' Tapis (Pendenza 5%) + Mobilità Spalle + 2 serie leggere del 1° esercizio.",
+                    abs: "Leg Raises 3x15 (Arrotola il bacino) + Plank 3x60s (Spremi glutei).",
                     exs: [
-                        { id: 'a1', n: 'Lento Avanti Manubri', s: '3x8-10', t: 'Spalle Ant.', e: 'Siediti dritto. Scendi sotto le orecchie.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Dumbbell-Shoulder-Press.gif' },
-                        { id: 'a2', n: 'Lat Machine Pr. Larga', s: '3x10', t: 'V-Taper', e: 'Guida con i GOMITI. Strizza le scapole.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Lat-Pulldown.gif' },
-                        { id: 'a3', n: 'Panca Piana Manubri', s: '3x10', t: 'Massa Petto', e: 'Strizza il petto in risalita.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Dumbbell-Press.gif' },
-                        { id: 'a4', n: 'SS: Curl Bilanciere EZ', s: '4x10', t: 'Bicipiti', e: 'Gomiti fermi. Spremi in alto.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Z-Bar-Curl.gif' },
-                        { id: 'a5', n: 'SS: French Press EZ', s: '4x10', t: 'Tricipiti', e: 'Porta alla fronte. Gomiti stretti.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/ez-bar-lying-triceps-extension.gif' },
-                        { id: 'a6', n: 'Alzate Laterali', s: '3x15', t: 'Larghezza', e: 'Mignolo in su. Isola il deltoide.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Dumbbell-Lateral-Raise.gif' },
-                        { id: 'a7', n: 'Facepull ai Cavi', s: '3x12', t: 'Postura', e: 'Tira alla fronte aprendo la corda.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Face-Pull.gif' }
+                        { id: 'a1', n: 'Lento Avanti Manubri', s: '3x8-10', t: 'Spalle Ant.', e: 'Siediti dritto. Scendi fin sotto le orecchie. Spingi senza toccare i pesi. NON inarcare eccessivamente la schiena.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Dumbbell-Shoulder-Press.gif' },
+                        { id: 'a2', n: 'Lat Machine Pr. Larga', s: '3x10', t: 'V-Taper Spessore', e: 'Guida con i GOMITI, non con le mani. Strizza le scapole in fondo. Busto leggermente inclinato.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Lat-Pulldown.gif' },
+                        { id: 'a3', n: 'Panca Piana Manubri', s: '3x10', t: 'Massa Petto', e: 'Scendi lentamente sentendo lo stretch. In risalita, strizza il petto come se volessi unire i bicipiti.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Dumbbell-Press.gif' },
+                        { id: 'a4', n: 'SS: Curl Bilanciere EZ', s: '4x10', t: 'Bicipiti Massa', e: 'Gomiti incollati ai fianchi. NON oscillare. Spremi il bicipite nel punto più alto del movimento.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Z-Bar-Curl.gif' },
+                        { id: 'a5', n: 'SS: French Press EZ', s: '4x10', t: 'Tricipiti Spessore', e: 'Bilanciere alla fronte. Tieni i gomiti stretti e fermi nello spazio. Estendi completamente.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/ez-bar-lying-triceps-extension.gif' },
+                        { id: 'a6', n: 'Alzate Laterali', s: '3x15', t: 'Larghezza Spalle', e: 'Mignolo leggermente in su. Non superare la linea spalle. Movimento controllato, no slanci.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Dumbbell-Lateral-Raise.gif' },
+                        { id: 'a7', n: 'Facepull ai Cavi', s: '3x12', t: 'Dettaglio/Postura', e: 'Tira la corda verso la fronte aprendo i gomiti. Utile per postura da ufficio e spalle tonde.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Face-Pull.gif' }
                     ]
                 },
                 B: {
                     name: "Width & Definition",
-                    concept: "Focus ampiezza laterale e dettaglio braccia. Tensione costante.",
-                    warmup: "7' Tapis + Mobilità elastico",
-                    abs: "Woodchopper 3x15 + Bicycle 3x20",
+                    concept: "Focus sull ampiezza laterale (V-Shape) e isolamento braccia. Tensione costante per scolpire i dettagli.",
+                    warmup: "7' Tapis + Mobilità cuffia rotatori con elastico o pesetti da 1kg.",
+                    abs: "Woodchopper 3x15 (Taglia diagonale) + Bicycle Crunch 3x20 (Gomito-Ginocchio opposto).",
                     exs: [
-                        { id: 'b1', n: 'Trazioni / Lat Stretta', s: '3xMax/10', t: 'Dorso V', e: 'Allunga in alto. Petto alla sbarra.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Pull-up.gif' },
-                        { id: 'b2', n: 'Panca Inclinata Man.', s: '3x10', t: 'Petto Alto', e: 'Inclinazione 30°. Look pieno.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Incline-Dumbbell-Press.gif' },
-                        { id: 'b3', n: 'Alzate Laterali Cavi', s: '3x12', t: 'Isolamento', e: 'Cavo basso dietro schiena.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Cable-Lateral-Raise.gif' },
-                        { id: 'b4', n: 'SS: Hammer Curl', s: '4x12', t: 'Brachiale', e: 'Presa a martello. Spessore braccio.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/dumbbell-hammer-curl.gif' },
-                        { id: 'b5', n: 'SS: Pushdown Corda', s: '4x12', t: 'Tricep Peak', e: 'Apri corda in fondo. Strizza.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/rope-pushdown.gif' },
-                        { id: 'b6', n: 'Curl Panca Inc. 45°', s: '2x12', t: 'Stretch', e: 'Braccia dietro busto. No oscillare.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/incline-dumbbell-curl.gif' },
-                        { id: 'b7', n: 'Dips Panche', s: '3xMax', t: 'Finisher', e: 'Gomiti stretti. Focus tricipite.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Bench-Dips.gif' }
+                        { id: 'b1', n: 'Trazioni o Lat Stretta', s: '3xMax/10', t: 'Ampiezza Dorso', e: 'Massimo allungamento in alto. Tira portando il petto alla sbarra. Fondamentale per allargare.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Pull-up.gif' },
+                        { id: 'b2', n: 'Panca Inclinata Man.', s: '3x10', t: 'Petto Alto', e: 'Panca 30°. Spingi verso l alto e l interno. Crea il look pieno sotto le clavicole.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Incline-Dumbbell-Press.gif' },
+                        { id: 'b3', n: 'Alzate Laterali Cavi', s: '3x12', t: 'Tensione Spalle', e: 'Cavo basso dietro schiena per più stretch. Non sollevare la scapola, isola il deltoide.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Cable-Lateral-Raise.gif' },
+                        { id: 'b4', n: 'SS: Hammer Curl', s: '4x12', t: 'Spessore Brachiale', e: 'Presa a martello. Allarga il braccio lateralmente. Fondamentale per la circonferenza.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/dumbbell-hammer-curl.gif' },
+                        { id: 'b5', n: 'SS: Pushdown Corda', s: '4x12', t: 'Dettaglio Tricipiti', e: 'Gomiti bloccati. In fondo APRI la corda verso l esterno. Strizza per 1 secondo.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/rope-pushdown.gif' },
+                        { id: 'b6', n: 'Curl Panca Inc. 45°', s: '2x12', t: 'Picco Bicipite', e: 'Braccia dietro busto. Massimo stretch. Non muovere i gomiti durante il curl.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/incline-dumbbell-curl.gif' },
+                        { id: 'b7', n: 'Dips Panche', s: '3xMax', t: 'Finisher Braccia', e: 'Gomiti stretti. Scendi finchè l omero è parallelo e risali esplosivo.', g: 'https://www.fitnessprogramer.com/wp-content/uploads/2021/02/Bench-Dips.gif' }
                     ]
                 }
             },
-            weights: {},
             diet: [
                 { t: "Colazione", v: [
-                    { d: "80g Avena + 150g Albume + 1 Uovo", k: 515, p: 32 },
-                    { d: "250g Yogurt Greco + 50g Granola + Noci", k: 490, p: 30 },
-                    { d: "Poke: Riso + Pollo + Edamame + Avocado", k: 650, p: 35 },
-                    { d: "Skyr (Supermercato) + 1 Barretta + Mandorle", k: 480, p: 32 },
-                    { d: "30g Whey + Banana + 40g Farina Avena", k: 500, p: 30 },
-                    { d: "Omelette 2 Uova + Pane Integrale (Bar)", k: 460, p: 25 }
+                    { d: "80g Avena + 150g Albume + 1 Uovo + 50g Mirtilli", k: 515, p: 32 },
+                    { d: "250g Yogurt Greco (2%) + 50g Granola + 20g Noci", k: 490, p: 30 },
+                    { d: "80g Pane integrale + 100g Bresaola + 50g Avocado", k: 510, p: 35 },
+                    { d: "Pancake proteico + 1 Mela + 15g Burro arachidi", k: 480, p: 25 },
+                    { d: "Shake: 30g Whey + 1 Banana + 40g Farina Avena", k: 500, p: 30 },
+                    { d: "Bar: Omelette 3 albumi/1 uovo + 2 fette pane tostato", k: 450, p: 28 }
                 ]},
                 { t: "Pranzo", v: [
-                    { d: "100g Riso + 150g Pollo + Olio", k: 690, p: 40 },
-                    { d: "100g Pasta + 150g Manzo + Olio", k: 720, p: 38 },
-                    { d: "Piadina Bresaola, Rucola, Squacquerone", k: 650, p: 35 },
-                    { d: "Piatto Pronto Esselunga/Conad: Pollo e Riso", k: 610, p: 32 },
-                    { d: "Insalatona Ristorante: Tonno + Uova + Olio", k: 590, p: 30 },
-                    { d: "Burger Tacchino (200g) + 80g Pane + Verdure", k: 640, p: 40 }
+                    { d: "100g Riso Basmati + 150g Pollo + 200g Zucchine + 15g Olio EVO", k: 690, p: 40 },
+                    { d: "100g Pasta integrale + 150g Manzo magro + 10g Olio EVO", k: 720, p: 38 },
+                    { d: "Piadina integrale + 100g Bresaola + Squacquerone light", k: 650, p: 35 },
+                    { d: "Poke Media: Riso + Pollo/Tonno + Edamame + Avocado", k: 700, p: 35 },
+                    { d: "Pronto: Pollo e Riso o Pasta al sugo (Supermercato)", k: 600, p: 30 },
+                    { d: "Insalatona: Tonno + 2 Uova sode + 80g Pane + Olio", k: 620, p: 32 }
                 ]}
-            ],
-            roadmap: [
-                { m: "Aprile", t: "ADATTAMENTO", d: "Tecnica perfetta, attivazione bicipiti/tricipiti, inizio creatina." },
-                { m: "Maggio", t: "OVERLOAD", d: "Aumento carichi +10%, focus larghezza spalle." },
-                { m: "Giugno", t: "V-SHAPE", d: "Definizione addome basso, dieta rigorosa, vene evidenti." },
-                { m: "Luglio", t: "PEAK", d: "Target 64kg, braccia massime, forma da spiaggia top." }
-            ],
-            blog: [
-                { title: "Perché i Tricipiti?", body: "Fanno i 2/3 del braccio. Se vuoi circonferenza, spingi sulle Dips." },
-                { title: "Desk-Job Hack", body: "Lavorare al PC chiude le spalle. Fai Facepull ogni sessione." }
             ]
         };
 
-        let state = JSON.parse(localStorage.getItem('aesthetic_v14')) || initialData;
-        function save() { localStorage.setItem('aesthetic_v14', JSON.stringify(state)); render(); }
+        let state = JSON.parse(localStorage.getItem('aesthetic_v15')) || initialData;
+        function save() { localStorage.setItem('aesthetic_v15', JSON.stringify(state)); render(); }
 
         // --- ICONS ---
         const icons = {
-            power: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 12h12M6 8h12M6 16h12"/></svg>`,
-            fuel: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2M7 2v20M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>`,
-            core: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="m9 12 2 2 4-4"/></svg>`,
-            info: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>`,
-            plus: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 5v14M5 12h14"/></svg>`
+            gym: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 12h12M6 8h12M6 16h12"/></svg>`,
+            diet: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2M7 2v20M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>`,
+            plan: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>`,
+            water: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>`
         };
 
         function render() {
             const app = document.getElementById('app');
             const r = state.workout[state.routine];
+            const date = state.selectedDate;
+            if (!state.tasks[date]) state.tasks[date] = [];
+            if (!state.water[date]) state.water[date] = 0;
 
             let html = `
-                <header class="bg-indigo-800 p-6 text-white rounded-b-[2.5rem] shadow-xl sticky top-0 z-50 glass border-b border-white/10">
+                <header class="bg-indigo-800 p-6 text-white rounded-b-[2.5rem] shadow-xl sticky top-0 z-50">
                     <div class="flex justify-between items-center">
-                        <h1 class="text-xl font-black italic tracking-tighter uppercase leading-none">Aesthetic OS</h1>
-                        <div class="flex gap-2">
-                             <div class="bg-indigo-600 px-3 py-1 rounded-full text-[9px] font-bold uppercase">60kg → 64kg</div>
-                        </div>
+                        <h1 class="text-xl font-black italic tracking-tighter uppercase">Aesthetic Master OS</h1>
+                        <span class="text-[9px] font-bold bg-white/20 px-3 py-1 rounded-full uppercase">31y | 60kg</span>
                     </div>
                 </header>
-                <main class="p-4 max-w-md mx-auto space-y-6 animate-up">
+                <main class="p-4 max-w-md mx-auto space-y-6 pb-32">
             `;
 
-            // --- TAB POWER (ALLENAMENTO) ---
-            if (state.tab === 'power') {
+            // --- TAB GYM ---
+            if (state.tab === 'gym') {
                 html += `
                     <div class="flex bg-white p-1 rounded-2xl shadow-inner border">
-                        <button onclick="state.routine='A'; save()" class="flex-1 py-3 rounded-xl font-black text-[10px] tracking-widest ${state.routine === 'A' ? 'bg-indigo-600 text-white' : 'text-slate-400'} uppercase transition-all">Routine A</button>
-                        <button onclick="state.routine='B'; save()" class="flex-1 py-3 rounded-xl font-black text-[10px] tracking-widest ${state.routine === 'B' ? 'bg-indigo-600 text-white' : 'text-slate-400'} uppercase transition-all">Routine B</button>
+                        <button onclick="state.routine='A'; save()" class="flex-1 py-3 rounded-xl font-black text-[10px] ${state.routine==='A'?'bg-indigo-600 text-white':'text-slate-400'} uppercase">Routine A</button>
+                        <button onclick="state.routine='B'; save()" class="flex-1 py-3 rounded-xl font-black text-[10px] ${state.routine==='B'?'bg-indigo-600 text-white':'text-slate-400'} uppercase">Routine B</button>
                     </div>
-                    <div class="space-y-8">
+                    <div class="bg-indigo-700 p-6 rounded-[2.5rem] text-white shadow-lg">
+                        <p class="text-[9px] font-black opacity-50 uppercase tracking-widest mb-1 italic font-bold tracking-widest">Concept Tecnico</p>
+                        <p class="text-xs font-bold leading-relaxed italic">"${r.concept}"</p>
+                    </div>
+                    <div class="bg-amber-100 border border-amber-200 p-5 rounded-3xl">
+                        <p class="text-[9px] font-black text-amber-600 uppercase mb-1 tracking-widest"> Warmup & Mobility</p>
+                        <p class="text-xs font-bold text-amber-900">${r.warmup}</p>
+                    </div>
+                    <div class="space-y-10">
                         ${r.exs.map(ex => `
-                            <div class="bg-white p-2 rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden">
-                                <div class="gif-container">
+                            <div class="card-pro overflow-hidden p-2">
+                                <div class="gif-container relative">
                                     <img src="${ex.g}" loading="lazy">
-                                    <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-2xl shadow-lg border border-indigo-100">
-                                        <input type="number" onchange="state.weights['${ex.id}']=this.value; save()" 
-                                               class="w-12 text-center font-black text-indigo-700 bg-transparent text-sm" 
-                                               value="${state.weights[ex.id] || ''}" placeholder="KG">
+                                    <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-2xl shadow-lg">
+                                        <input type="number" onchange="state.weights['${ex.id}']=this.value; save()" class="w-12 text-center font-black text-indigo-700 text-sm" value="${state.weights[ex.id]||''}" placeholder="KG">
                                     </div>
                                 </div>
                                 <div class="p-5">
-                                    <h4 class="font-black text-slate-800 text-sm uppercase mb-1">${ex.n}</h4>
-                                    <div class="flex items-center gap-2 mb-3">
-                                        <span class="text-indigo-600 text-[10px] font-black uppercase tracking-widest">${ex.s}</span>
-                                        <span class="text-slate-400 text-[9px] font-bold uppercase tracking-tighter">• ${ex.t}</span>
+                                    <div class="flex justify-between items-center mb-3">
+                                        <div>
+                                            <h4 class="font-black text-slate-800 text-sm uppercase">${ex.n}</h4>
+                                            <span class="text-indigo-600 text-[10px] font-black uppercase tracking-widest">${ex.s}</span>
+                                        </div>
+                                        <span class="text-slate-300 text-[8px] font-black uppercase tracking-tighter">${ex.t}</span>
                                     </div>
-                                    <p class="text-[10px] text-slate-500 font-medium leading-relaxed bg-slate-50 p-3 rounded-xl border border-slate-100">${ex.e}</p>
+                                    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 relative">
+                                        <div class="absolute -top-2 left-4 bg-white px-2 border border-slate-100 text-[8px] font-black text-indigo-400 uppercase">Coach Tip & Execution</div>
+                                        <p class="text-[10px] text-slate-500 font-bold leading-relaxed">${ex.e}</p>
+                                    </div>
                                 </div>
                             </div>
                         `).join('')}
                     </div>
+                    <div class="bg-slate-900 p-8 rounded-[3rem] text-center text-white shadow-2xl">
+                        <p class="text-[9px] font-black text-indigo-400 uppercase mb-2 tracking-widest italic">Addominali V-Shape</p>
+                        <p class="text-xs font-black italic">"${r.abs}"</p>
+                    </div>
                 `;
             }
 
-            // --- TAB FUEL (DIETA) ---
-            else if (state.tab === 'fuel') {
+            // --- TAB DIET ---
+            else if (state.tab === 'diet') {
                 html += `
-                    <div class="bg-emerald-600 p-8 rounded-[3rem] text-white shadow-xl">
-                        <p class="text-[10px] font-black opacity-70 uppercase mb-1">Target</p>
-                        <h2 class="text-3xl font-black italic uppercase">2400 Kcal</h2>
+                    <div class="bg-emerald-600 p-8 rounded-[3rem] text-white shadow-xl text-center">
+                        <p class="text-[10px] font-black opacity-70 uppercase italic font-bold tracking-widest">Fuel Target</p>
+                        <h2 class="text-4xl font-black italic tracking-tighter">2400 <span class="text-xl font-normal opacity-60">Kcal</span></h2>
                     </div>
                     ${state.diet.map(m => `
-                        <div class="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm">
-                            <h4 class="text-[10px] font-black text-slate-300 uppercase tracking-widest mb-4 border-b pb-2">${m.t}</h4>
-                            <div class="space-y-3">
+                        <div class="bg-white p-7 rounded-[3rem] border border-slate-100 shadow-sm">
+                            <h4 class="text-[11px] font-black text-slate-300 uppercase tracking-widest mb-5 border-b pb-2">${m.t}</h4>
+                            <div class="space-y-4">
                                 ${m.v.map(v => `
-                                    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                                        <p class="text-xs font-bold text-slate-700 mb-2 leading-snug">${v.d}</p>
-                                        <div class="flex gap-2 text-[9px] font-black uppercase">
-                                            <span class="bg-emerald-100 text-emerald-700 px-2 py-1 rounded">${v.k} kcal</span>
-                                            <span class="bg-indigo-100 text-indigo-700 px-2 py-1 rounded">P: ${v.p}g</span>
+                                    <div class="p-5 bg-slate-50 rounded-[2.5rem] border border-slate-100 relative overflow-hidden">
+                                        <div class="absolute top-0 left-0 w-1.5 h-full bg-emerald-300"></div>
+                                        <p class="text-xs font-black text-slate-700 mb-3">${v.d}</p>
+                                        <div class="flex gap-3">
+                                            <span class="text-[9px] font-black bg-emerald-100 text-emerald-700 px-3 py-1.5 rounded-xl uppercase">${v.k} KCAL</span>
+                                            <span class="text-[9px] font-black bg-indigo-100 text-indigo-700 px-3 py-1.5 rounded-xl uppercase">P: ${v.p}G</span>
                                         </div>
                                     </div>
                                 `).join('')}
@@ -181,89 +183,68 @@
                 `;
             }
 
-            // --- TAB CORE (TASKS & TRACKER) ---
-            else if (state.tab === 'core') {
+            // --- TAB PLANNER ---
+            else if (state.tab === 'plan') {
                 html += `
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="bg-blue-500 p-6 rounded-[2.5rem] text-white shadow-lg flex flex-col items-center">
-                            <p class="text-[10px] font-black uppercase opacity-70 mb-2">Water (3L)</p>
-                            <h2 class="text-3xl font-black">${(state.water * 0.25).toFixed(1)}L</h2>
-                            <button onclick="state.water++; save()" class="mt-4 bg-white/20 p-3 rounded-full hover:bg-white/40 transition">
-                                ${icons.plus}
-                            </button>
-                        </div>
-                        <div class="bg-indigo-600 p-6 rounded-[2.5rem] text-white shadow-lg flex flex-col justify-between">
-                            <p class="text-[10px] font-black uppercase opacity-70 mb-2">Check-in</p>
-                            <div class="space-y-2">
-                                <label class="flex items-center gap-2 text-[10px] font-bold"><input type="checkbox" ${state.checks.workout ? 'checked' : ''} onclick="state.checks.workout=!state.checks.workout; save()"> Gym</label>
-                                <label class="flex items-center gap-2 text-[10px] font-bold"><input type="checkbox" ${state.checks.diet ? 'checked' : ''} onclick="state.checks.diet=!state.checks.diet; save()"> Diet</label>
-                                <label class="flex items-center gap-2 text-[10px] font-bold"><input type="checkbox" ${state.checks.supps ? 'checked' : ''} onclick="state.checks.supps=!state.checks.supps; save()"> Supps</label>
-                            </div>
-                        </div>
+                    <div class="bg-white p-6 rounded-[2.5rem] shadow-sm border mb-6 text-center">
+                        <input type="date" value="${state.selectedDate}" onchange="state.selectedDate=this.value; save()" class="font-black text-indigo-600 uppercase text-lg">
                     </div>
-                    <div class="bg-white p-7 rounded-[3rem] border border-slate-100 shadow-sm">
-                        <h4 class="text-[10px] font-black text-slate-300 uppercase tracking-widest mb-6">Aesthetic Tasks</h4>
+                    <div class="bg-white p-8 rounded-[3rem] shadow-sm border">
+                        <h4 class="text-[10px] font-black text-slate-300 uppercase tracking-widest mb-6 italic">Task List del Giorno</h4>
                         <div class="space-y-4">
-                            ${state.tasks.map(t => `
+                            ${state.tasks[date].map((t, idx) => `
                                 <div class="flex items-center gap-4 group">
-                                    <input type="checkbox" ${t.done ? 'checked' : ''} onclick="t.done=!t.done; save()" class="w-6 h-6 rounded-full border-2 border-indigo-200 checked:bg-indigo-600 transition-all">
-                                    <span class="text-xs font-bold ${t.done ? 'line-through text-slate-300' : 'text-slate-700'} uppercase tracking-tighter">${t.txt}</span>
+                                    <input type="checkbox" ${t.done?'checked':''} onclick="state.tasks['${date}'][${idx}].done=!state.tasks['${date}'][${idx}].done; save()" class="w-6 h-6 rounded-full accent-indigo-600 transition-all">
+                                    <span class="flex-1 text-xs font-bold ${t.done?'line-through text-slate-300':'text-slate-700'} uppercase">${t.txt}</span>
+                                    <button onclick="state.tasks['${date}'].splice(${idx},1); save()" class="text-red-300 opacity-0 group-hover:opacity-100">×</button>
                                 </div>
                             `).join('')}
+                            <div class="mt-8 flex gap-2">
+                                <input id="newTask" type="text" placeholder="Aggiungi task..." class="flex-1 bg-slate-100 rounded-xl px-4 py-3 text-xs font-bold">
+                                <button onclick="addTask()" class="bg-indigo-600 text-white p-3 rounded-xl">+</button>
+                            </div>
                         </div>
                     </div>
                 `;
             }
 
-            // --- TAB INFO (BLOG & ROADMAP) ---
-            else if (state.tab === 'info') {
+            // --- TAB WATER ---
+            else if (state.tab === 'water') {
                 html += `
-                    <div class="bg-indigo-900 p-8 rounded-[3rem] text-white shadow-2xl">
-                        <h2 class="text-2xl font-black italic tracking-tighter uppercase mb-6">Roadmap 2026</h2>
-                        <div class="space-y-6">
-                            ${state.roadmap.map(item => `
-                                <div class="flex gap-4">
-                                    <div class="text-indigo-400 font-black text-sm uppercase">${item.m}</div>
-                                    <div class="flex-1 border-l-2 border-indigo-700 pl-4">
-                                        <p class="text-xs font-black text-white uppercase">${item.t}</p>
-                                        <p class="text-[10px] text-indigo-200 mt-1">${item.d}</p>
-                                    </div>
-                                </div>
-                            `).join('')}
+                    <div class="bg-blue-500 p-12 rounded-[3.5rem] text-white shadow-xl text-center flex flex-col items-center">
+                        <p class="text-[10px] font-black opacity-70 uppercase tracking-widest mb-2 font-bold italic">Hydration Tracker</p>
+                        <h2 class="text-5xl font-black italic tracking-tighter">${(state.water[date]*0.25).toFixed(2)}L</h2>
+                        <p class="text-xs font-bold opacity-60 mt-2 italic font-bold">Target: 3.00L</p>
+                        <div class="mt-8 flex gap-4">
+                            <button onclick="state.water['${date}']=0; save()" class="bg-white/10 px-6 py-2 rounded-full text-[10px] font-bold uppercase">Reset</button>
+                            <button onclick="state.water['${date}']++; save()" class="bg-white p-6 rounded-full text-blue-500 shadow-xl transition-transform active:scale-125">
+                                ${icons.water}
+                            </button>
                         </div>
-                    </div>
-                    <div class="space-y-4">
-                        <h4 class="text-[10px] font-black text-slate-300 uppercase tracking-widest px-4">Expert Blog</h4>
-                        ${state.blog.map(post => `
-                            <div class="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm">
-                                <h5 class="font-black text-slate-800 text-xs uppercase mb-2">${post.title}</h5>
-                                <p class="text-[10px] text-slate-500 font-medium leading-relaxed">${post.body}</p>
-                            </div>
-                        `).join('')}
                     </div>
                 `;
             }
 
             html += `
                 </main>
-                <nav class="fixed bottom-0 left-0 right-0 h-24 glass border-t border-slate-200 flex justify-around items-center px-4 z-[100] rounded-t-[2.5rem]">
-                    <button onclick="state.tab='power'; save()" class="flex flex-col items-center gap-1 ${state.tab === 'power' ? 'text-indigo-600' : 'text-slate-400'}">
-                        ${icons.power} <span class="text-[8px] font-black uppercase">Power</span>
-                    </button>
-                    <button onclick="state.tab='fuel'; save()" class="flex flex-col items-center gap-1 ${state.tab === 'fuel' ? 'text-emerald-600' : 'text-slate-400'}">
-                        ${icons.fuel} <span class="text-[8px] font-black uppercase">Fuel</span>
-                    </button>
-                    <button onclick="state.tab='core'; save()" class="flex flex-col items-center gap-1 ${state.tab === 'core' ? 'text-indigo-600' : 'text-slate-400'}">
-                        ${icons.core} <span class="text-[8px] font-black uppercase">Core</span>
-                    </button>
-                    <button onclick="state.tab='info'; save()" class="flex flex-col items-center gap-1 ${state.tab === 'info' ? 'text-indigo-600' : 'text-slate-400'}">
-                        ${icons.info} <span class="text-[8px] font-black uppercase">Info</span>
-                    </button>
+                <nav class="fixed bottom-6 left-6 right-6 h-20 bg-white border border-slate-100 shadow-2xl rounded-[2.5rem] flex items-center justify-around px-4 z-[100]">
+                    <button onclick="state.tab='gym'; save()" class="flex flex-col items-center ${state.tab==='gym'?'text-indigo-600':'text-slate-300'} transition-all">${icons.gym}<span class="text-[8px] font-black uppercase mt-1">Gym</span></button>
+                    <button onclick="state.tab='diet'; save()" class="flex flex-col items-center ${state.tab==='diet'?'text-emerald-600':'text-slate-300'} transition-all">${icons.diet}<span class="text-[8px] font-black uppercase mt-1">Diet</span></button>
+                    <button onclick="state.tab='plan'; save()" class="flex flex-col items-center ${state.tab==='plan'?'text-indigo-600':'text-slate-300'} transition-all">${icons.plan}<span class="text-[8px] font-black uppercase mt-1">Plan</span></button>
+                    <button onclick="state.tab='water'; save()" class="flex flex-col items-center ${state.tab==='water'?'text-blue-500':'text-slate-300'} transition-all">${icons.water}<span class="text-[8px] font-black uppercase mt-1">Water</span></button>
                 </nav>
             `;
 
             app.innerHTML = html;
         }
+
+        window.addTask = () => {
+            const input = document.getElementById('newTask');
+            if (!input.value) return;
+            const date = state.selectedDate;
+            state.tasks[date].push({ txt: input.value, done: false });
+            save();
+        };
 
         render();
     </script>
