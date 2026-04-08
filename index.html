@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Aesthetic Master OS v15</title>
+    <title>Aesthetic Master OS v16</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -11,7 +11,7 @@
         body { -webkit-tap-highlight-color: transparent; font-family: -apple-system, system-ui, sans-serif; background: #f8fafc; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .tab-active { color: #4f46e5; border-bottom: 3px solid #4f46e5; }
-        .gif-container { background: #fff; border-radius: 1.5rem; overflow: hidden; height: 240px; border: 1px solid #f1f5f9; }
+        .gif-container { background: #fff; border-radius: 1.5rem; overflow: hidden; height: 240px; position: relative; border: 1px solid #f1f5f9; }
         .gif-container img { width: 100%; height: 100%; object-fit: contain; }
         .card-pro { background: white; border-radius: 2rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px -2px rgba(0,0,0,0.05); }
         input[type="number"], input[type="text"] { border: none; outline: none; background: transparent; }
@@ -21,13 +21,13 @@
     <div id="app"></div>
 
     <script>
-        // --- DATA ARCHIVE ---
+        // --- DATABASE AGGIORNATO V16 ---
         const initialData = {
             tab: 'gym',
             routine: 'A',
             selectedDate: new Date().toISOString().split('T')[0],
-            water: {}, // { '2024-04-08': 0 }
-            tasks: {}, // { '2024-04-08': [{id, txt, done}] }
+            water: {}, 
+            tasks: {}, 
             weights: {},
             workout: {
                 A: {
@@ -77,19 +77,36 @@
                     { d: "Poke Media: Riso + Pollo/Tonno + Edamame + Avocado", k: 700, p: 35 },
                     { d: "Pronto: Pollo e Riso o Pasta al sugo (Supermercato)", k: 600, p: 30 },
                     { d: "Insalatona: Tonno + 2 Uova sode + 80g Pane + Olio", k: 620, p: 32 }
+                ]},
+                { t: "Spuntino", v: [
+                    { d: "1 Barretta Proteica (60g) + 1 Mela (150g)", k: 285, p: 20 },
+                    { d: "40g Parmigiano Reggiano + 1 Pera (150g)", k: 260, p: 13 },
+                    { d: "170g Skyr Bianco + 20g Mandorle", k: 275, p: 22 }
+                ]},
+                { t: "Cena", v: [
+                    { d: "150g Salmone + 250g Patate + 200g Asparagi + 5g Olio EVO", k: 650, p: 36 },
+                    { d: "200g Orata + 80g Couscous + 200g Broccoli + 15g Olio EVO", k: 620, p: 42 },
+                    { d: "150g Tacchino + 80g Pane integrale + Insalata + 15g Olio EVO", k: 600, p: 38 }
                 ]}
+            ],
+            stretches: [
+                { n: "Pettorali al muro", t: "Petto / Spalle", b: "Apre il torace, corregge la postura da PC, allarga visivamente le spalle.", g: "https://www.fitnessprogramer.com/wp-content/uploads/2021/05/Chest-Stretch.gif" },
+                { n: "Stretching Dorsali", t: "Dorso (V-Shape)", b: "Allunga il gran dorsale, permettendo una miglior espansione della schiena a V.", g: "https://www.fitnessprogramer.com/wp-content/uploads/2023/10/Lats-Stretch.gif" },
+                { n: "Collo e Trapezio", t: "Collo / Ufficio", b: "Rilascia la tensione accumulata davanti allo schermo. Riduce il mal di testa.", g: "https://www.fitnessprogramer.com/wp-content/uploads/2021/07/Neck-Stretch.gif" },
+                { n: "Estensori Avambraccio", t: "Avambracci / Mouse", b: "Fondamentale per chi usa molto il mouse. Previene l epicondilite.", g: "https://www.fitnessprogramer.com/wp-content/uploads/2022/02/Wrist-Extensor-Stretch.gif" },
+                { n: "Childs Pose", t: "Schiena Totale", b: "Decompressione vertebrale. Ottimo dopo una giornata seduti.", g: "https://www.fitnessprogramer.com/wp-content/uploads/2021/05/Childs-Pose.gif" }
             ]
         };
 
-        let state = JSON.parse(localStorage.getItem('aesthetic_v15')) || initialData;
-        function save() { localStorage.setItem('aesthetic_v15', JSON.stringify(state)); render(); }
+        let state = JSON.parse(localStorage.getItem('aesthetic_v16')) || initialData;
+        function save() { localStorage.setItem('aesthetic_v16', JSON.stringify(state)); render(); }
 
-        // --- ICONS ---
         const icons = {
             gym: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 12h12M6 8h12M6 16h12"/></svg>`,
             diet: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2M7 2v20M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>`,
             plan: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>`,
-            water: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>`
+            water: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>`,
+            flex: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 15V8a4 4 0 1 0-8 0v7a4 4 0 1 1-8 0"/></svg>`
         };
 
         function render() {
@@ -102,136 +119,77 @@
             let html = `
                 <header class="bg-indigo-800 p-6 text-white rounded-b-[2.5rem] shadow-xl sticky top-0 z-50">
                     <div class="flex justify-between items-center">
-                        <h1 class="text-xl font-black italic tracking-tighter uppercase">Umberto Case</h1>
-                        <span class="text-[9px] font-bold bg-white/20 px-3 py-1 rounded-full uppercase">31y | 60kg</span>
+                        <h1 class="text-xl font-black italic uppercase">Aesthetic Master OS</h1>
+                        <span class="text-[9px] font-bold bg-white/20 px-3 py-1 rounded-full uppercase italic">V16 FLEX</span>
                     </div>
                 </header>
                 <main class="p-4 max-w-md mx-auto space-y-6 pb-32">
             `;
 
-            // --- TAB GYM ---
             if (state.tab === 'gym') {
                 html += `
                     <div class="flex bg-white p-1 rounded-2xl shadow-inner border">
                         <button onclick="state.routine='A'; save()" class="flex-1 py-3 rounded-xl font-black text-[10px] ${state.routine==='A'?'bg-indigo-600 text-white':'text-slate-400'} uppercase">Routine A</button>
                         <button onclick="state.routine='B'; save()" class="flex-1 py-3 rounded-xl font-black text-[10px] ${state.routine==='B'?'bg-indigo-600 text-white':'text-slate-400'} uppercase">Routine B</button>
                     </div>
-                    <div class="bg-indigo-700 p-6 rounded-[2.5rem] text-white shadow-lg">
-                        <p class="text-[9px] font-black opacity-50 uppercase tracking-widest mb-1 italic font-bold tracking-widest">Concept Tecnico</p>
-                        <p class="text-xs font-bold leading-relaxed italic">"${r.concept}"</p>
-                    </div>
-                    <div class="bg-amber-100 border border-amber-200 p-5 rounded-3xl">
-                        <p class="text-[9px] font-black text-amber-600 uppercase mb-1 tracking-widest"> Warmup & Mobility</p>
-                        <p class="text-xs font-bold text-amber-900">${r.warmup}</p>
-                    </div>
+                    <div class="bg-indigo-700 p-6 rounded-[2.5rem] text-white shadow-lg"><p class="text-[9px] font-black opacity-50 uppercase mb-1 italic">Concept Tecnico</p><p class="text-xs font-bold leading-relaxed italic">"${r.concept}"</p></div>
+                    <div class="bg-amber-100 border border-amber-200 p-5 rounded-3xl"><p class="text-[9px] font-black text-amber-600 uppercase mb-1">Warmup & Mobility</p><p class="text-xs font-bold text-amber-900">${r.warmup}</p></div>
                     <div class="space-y-10">
                         ${r.exs.map(ex => `
                             <div class="card-pro overflow-hidden p-2">
-                                <div class="gif-container relative">
-                                    <img src="${ex.g}" loading="lazy">
-                                    <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-2xl shadow-lg">
-                                        <input type="number" onchange="state.weights['${ex.id}']=this.value; save()" class="w-12 text-center font-black text-indigo-700 text-sm" value="${state.weights[ex.id]||''}" placeholder="KG">
-                                    </div>
-                                </div>
-                                <div class="p-5">
-                                    <div class="flex justify-between items-center mb-3">
-                                        <div>
-                                            <h4 class="font-black text-slate-800 text-sm uppercase">${ex.n}</h4>
-                                            <span class="text-indigo-600 text-[10px] font-black uppercase tracking-widest">${ex.s}</span>
-                                        </div>
-                                        <span class="text-slate-300 text-[8px] font-black uppercase tracking-tighter">${ex.t}</span>
-                                    </div>
-                                    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 relative">
-                                        <div class="absolute -top-2 left-4 bg-white px-2 border border-slate-100 text-[8px] font-black text-indigo-400 uppercase">Coach Tip & Execution</div>
-                                        <p class="text-[10px] text-slate-500 font-bold leading-relaxed">${ex.e}</p>
-                                    </div>
-                                </div>
+                                <div class="gif-container"><img src="${ex.g}" loading="lazy"><div class="absolute top-4 right-4 bg-white/90 px-4 py-2 rounded-2xl shadow-lg"><input type="number" onchange="state.weights['${ex.id}']=this.value; save()" class="w-12 text-center font-black text-indigo-700 text-sm" value="${state.weights[ex.id]||''}" placeholder="KG"></div></div>
+                                <div class="p-5"><div class="flex justify-between items-center mb-3"><div><h4 class="font-black text-slate-800 text-sm uppercase">${ex.n}</h4><span class="text-indigo-600 text-[10px] font-black uppercase">${ex.s}</span></div><span class="text-slate-300 text-[8px] font-black uppercase">${ex.t}</span></div>
+                                <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 relative"><div class="absolute -top-2 left-4 bg-white px-2 text-[8px] font-black text-indigo-400 uppercase">Coach Tip</div><p class="text-[10px] text-slate-500 font-bold leading-relaxed">${ex.e}</p></div></div>
                             </div>
                         `).join('')}
                     </div>
-                    <div class="bg-slate-900 p-8 rounded-[3rem] text-center text-white shadow-2xl">
-                        <p class="text-[9px] font-black text-indigo-400 uppercase mb-2 tracking-widest italic">Addominali V-Shape</p>
-                        <p class="text-xs font-black italic">"${r.abs}"</p>
-                    </div>
+                    <div class="bg-slate-900 p-8 rounded-[3rem] text-center text-white shadow-2xl"><p class="text-[9px] font-black text-indigo-400 uppercase mb-2 tracking-widest italic">Addominali V-Shape</p><p class="text-xs font-black italic">"${r.abs}"</p></div>
                 `;
-            }
-
-            // --- TAB DIET ---
-            else if (state.tab === 'diet') {
+            } else if (state.tab === 'diet') {
                 html += `
-                    <div class="bg-emerald-600 p-8 rounded-[3rem] text-white shadow-xl text-center">
-                        <p class="text-[10px] font-black opacity-70 uppercase italic font-bold tracking-widest">Fuel Target</p>
-                        <h2 class="text-4xl font-black italic tracking-tighter">2400 <span class="text-xl font-normal opacity-60">Kcal</span></h2>
+                    <div class="bg-emerald-600 p-8 rounded-[3rem] text-white shadow-xl text-center"><p class="text-[10px] font-black opacity-70 uppercase italic">Fuel Target</p><h2 class="text-4xl font-black italic">2400 <span class="text-xl font-normal opacity-60">Kcal</span></h2></div>
+                    ${state.diet.map(m => `<div class="bg-white p-7 rounded-[3rem] border shadow-sm mb-6"><h4 class="text-[11px] font-black text-slate-300 uppercase tracking-widest mb-5 border-b pb-2">${m.t}</h4><div class="space-y-4">${m.v.map(v => `<div class="p-5 bg-slate-50 rounded-[2.5rem] border relative overflow-hidden"><div class="absolute top-0 left-0 w-1.5 h-full bg-emerald-300"></div><p class="text-xs font-black text-slate-700 mb-3">${v.d}</p><div class="flex gap-3"><span class="text-[9px] font-black bg-emerald-100 text-emerald-700 px-3 py-1.5 rounded-xl uppercase">${v.k} KCAL</span><span class="text-[9px] font-black bg-indigo-100 text-indigo-700 px-3 py-1.5 rounded-xl uppercase">P: ${v.p}G</span></div></div>`).join('')}</div></div>`).join('')}
+                `;
+            } else if (state.tab === 'plan') {
+                html += `
+                    <div class="bg-white p-6 rounded-[2.5rem] shadow-sm border mb-6 text-center"><input type="date" value="${state.selectedDate}" onchange="state.selectedDate=this.value; save()" class="font-black text-indigo-600 uppercase text-lg"></div>
+                    <div class="bg-white p-8 rounded-[3rem] shadow-sm border"><h4 class="text-[10px] font-black text-slate-300 uppercase mb-6 italic">Task List del Giorno</h4><div class="space-y-4">${state.tasks[date].map((t, idx) => `<div class="flex items-center gap-4 group"><input type="checkbox" ${t.done?'checked':''} onclick="state.tasks['${date}'][${idx}].done=!state.tasks['${date}'][${idx}].done; save()" class="w-6 h-6 rounded-full accent-indigo-600 transition-all"><span class="flex-1 text-xs font-bold ${t.done?'line-through text-slate-300':'text-slate-700'} uppercase">${t.txt}</span><button onclick="state.tasks['${date}'].splice(${idx},1); save()" class="text-red-300 opacity-0 group-hover:opacity-100">×</button></div>`).join('')}<div class="mt-8 flex gap-2"><input id="newTask" type="text" placeholder="Aggiungi task..." class="flex-1 bg-slate-100 rounded-xl px-4 py-3 text-xs font-bold"><button onclick="addTask()" class="bg-indigo-600 text-white p-3 rounded-xl">+</button></div></div></div>
+                `;
+            } else if (state.tab === 'water') {
+                html += `
+                    <div class="bg-blue-500 p-12 rounded-[3.5rem] text-white shadow-xl text-center flex flex-col items-center"><p class="text-[10px] font-black opacity-70 uppercase tracking-widest mb-2 font-bold italic">Hydration Tracker</p><h2 class="text-5xl font-black italic tracking-tighter">${(state.water[date]*0.25).toFixed(2)}L</h2><div class="mt-8 flex gap-4"><button onclick="state.water['${date}']=0; save()" class="bg-white/10 px-6 py-2 rounded-full text-[10px] font-bold uppercase">Reset</button><button onclick="state.water['${date}']++; save()" class="bg-white p-6 rounded-full text-blue-500 shadow-xl">${icons.water}</button></div></div>
+                `;
+            } else if (state.tab === 'flex') {
+                html += `
+                    <div class="bg-indigo-900 p-8 rounded-[3rem] text-white shadow-xl text-center mb-6">
+                        <p class="text-[10px] font-black opacity-50 uppercase tracking-widest mb-1 italic">Flexibility & Posture</p>
+                        <h2 class="text-2xl font-black italic uppercase">Aesthetic Flex</h2>
                     </div>
-                    ${state.diet.map(m => `
-                        <div class="bg-white p-7 rounded-[3rem] border border-slate-100 shadow-sm">
-                            <h4 class="text-[11px] font-black text-slate-300 uppercase tracking-widest mb-5 border-b pb-2">${m.t}</h4>
-                            <div class="space-y-4">
-                                ${m.v.map(v => `
-                                    <div class="p-5 bg-slate-50 rounded-[2.5rem] border border-slate-100 relative overflow-hidden">
-                                        <div class="absolute top-0 left-0 w-1.5 h-full bg-emerald-300"></div>
-                                        <p class="text-xs font-black text-slate-700 mb-3">${v.d}</p>
-                                        <div class="flex gap-3">
-                                            <span class="text-[9px] font-black bg-emerald-100 text-emerald-700 px-3 py-1.5 rounded-xl uppercase">${v.k} KCAL</span>
-                                            <span class="text-[9px] font-black bg-indigo-100 text-indigo-700 px-3 py-1.5 rounded-xl uppercase">P: ${v.p}G</span>
-                                        </div>
+                    <div class="space-y-10">
+                        ${state.stretches.map(st => `
+                            <div class="card-pro overflow-hidden p-2">
+                                <div class="gif-container"><img src="${st.g}" loading="lazy"></div>
+                                <div class="p-5">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <h4 class="font-black text-slate-800 text-sm uppercase">${st.n}</h4>
+                                        <span class="bg-indigo-50 text-indigo-400 text-[8px] px-2 py-1 rounded-lg font-black uppercase tracking-tighter">${st.t}</span>
                                     </div>
-                                `).join('')}
-                            </div>
-                        </div>
-                    `).join('')}
-                `;
-            }
-
-            // --- TAB PLANNER ---
-            else if (state.tab === 'plan') {
-                html += `
-                    <div class="bg-white p-6 rounded-[2.5rem] shadow-sm border mb-6 text-center">
-                        <input type="date" value="${state.selectedDate}" onchange="state.selectedDate=this.value; save()" class="font-black text-indigo-600 uppercase text-lg">
-                    </div>
-                    <div class="bg-white p-8 rounded-[3rem] shadow-sm border">
-                        <h4 class="text-[10px] font-black text-slate-300 uppercase tracking-widest mb-6 italic">Task List del Giorno</h4>
-                        <div class="space-y-4">
-                            ${state.tasks[date].map((t, idx) => `
-                                <div class="flex items-center gap-4 group">
-                                    <input type="checkbox" ${t.done?'checked':''} onclick="state.tasks['${date}'][${idx}].done=!state.tasks['${date}'][${idx}].done; save()" class="w-6 h-6 rounded-full accent-indigo-600 transition-all">
-                                    <span class="flex-1 text-xs font-bold ${t.done?'line-through text-slate-300':'text-slate-700'} uppercase">${t.txt}</span>
-                                    <button onclick="state.tasks['${date}'].splice(${idx},1); save()" class="text-red-300 opacity-0 group-hover:opacity-100">×</button>
+                                    <p class="text-[10px] text-slate-500 font-bold leading-relaxed bg-slate-50 p-4 rounded-2xl border border-slate-100 italic">Beneficio: ${st.b}</p>
                                 </div>
-                            `).join('')}
-                            <div class="mt-8 flex gap-2">
-                                <input id="newTask" type="text" placeholder="Aggiungi task..." class="flex-1 bg-slate-100 rounded-xl px-4 py-3 text-xs font-bold">
-                                <button onclick="addTask()" class="bg-indigo-600 text-white p-3 rounded-xl">+</button>
                             </div>
-                        </div>
-                    </div>
-                `;
-            }
-
-            // --- TAB WATER ---
-            else if (state.tab === 'water') {
-                html += `
-                    <div class="bg-blue-500 p-12 rounded-[3.5rem] text-white shadow-xl text-center flex flex-col items-center">
-                        <p class="text-[10px] font-black opacity-70 uppercase tracking-widest mb-2 font-bold italic">Hydration Tracker</p>
-                        <h2 class="text-5xl font-black italic tracking-tighter">${(state.water[date]*0.25).toFixed(2)}L</h2>
-                        <p class="text-xs font-bold opacity-60 mt-2 italic font-bold">Target: 3.00L</p>
-                        <div class="mt-8 flex gap-4">
-                            <button onclick="state.water['${date}']=0; save()" class="bg-white/10 px-6 py-2 rounded-full text-[10px] font-bold uppercase">Reset</button>
-                            <button onclick="state.water['${date}']++; save()" class="bg-white p-6 rounded-full text-blue-500 shadow-xl transition-transform active:scale-125">
-                                ${icons.water}
-                            </button>
-                        </div>
+                        `).join('')}
                     </div>
                 `;
             }
 
             html += `
                 </main>
-                <nav class="fixed bottom-6 left-6 right-6 h-20 bg-white border border-slate-100 shadow-2xl rounded-[2.5rem] flex items-center justify-around px-4 z-[100]">
-                    <button onclick="state.tab='gym'; save()" class="flex flex-col items-center ${state.tab==='gym'?'text-indigo-600':'text-slate-300'} transition-all">${icons.gym}<span class="text-[8px] font-black uppercase mt-1">Gym</span></button>
-                    <button onclick="state.tab='diet'; save()" class="flex flex-col items-center ${state.tab==='diet'?'text-emerald-600':'text-slate-300'} transition-all">${icons.diet}<span class="text-[8px] font-black uppercase mt-1">Diet</span></button>
-                    <button onclick="state.tab='plan'; save()" class="flex flex-col items-center ${state.tab==='plan'?'text-indigo-600':'text-slate-300'} transition-all">${icons.plan}<span class="text-[8px] font-black uppercase mt-1">Plan</span></button>
-                    <button onclick="state.tab='water'; save()" class="flex flex-col items-center ${state.tab==='water'?'text-blue-500':'text-slate-300'} transition-all">${icons.water}<span class="text-[8px] font-black uppercase mt-1">Water</span></button>
+                <nav class="fixed bottom-6 left-2 right-2 h-20 bg-white border shadow-2xl rounded-[2.5rem] flex items-center justify-around px-2 z-[100]">
+                    <button onclick="state.tab='gym'; save()" class="flex flex-col items-center ${state.tab==='gym'?'text-indigo-600':'text-slate-300'} transition-all">${icons.gym}<span class="text-[7px] font-black uppercase mt-1">Gym</span></button>
+                    <button onclick="state.tab='diet'; save()" class="flex flex-col items-center ${state.tab==='diet'?'text-emerald-600':'text-slate-300'} transition-all">${icons.diet}<span class="text-[7px] font-black uppercase mt-1">Diet</span></button>
+                    <button onclick="state.tab='plan'; save()" class="flex flex-col items-center ${state.tab==='plan'?'text-indigo-600':'text-slate-300'} transition-all">${icons.plan}<span class="text-[7px] font-black uppercase mt-1">Plan</span></button>
+                    <button onclick="state.tab='water'; save()" class="flex flex-col items-center ${state.tab==='water'?'text-blue-500':'text-slate-300'} transition-all">${icons.water}<span class="text-[7px] font-black uppercase mt-1">Water</span></button>
+                    <button onclick="state.tab='flex'; save()" class="flex flex-col items-center ${state.tab==='flex'?'text-indigo-600':'text-slate-300'} transition-all">${icons.flex}<span class="text-[7px] font-black uppercase mt-1">Flex</span></button>
                 </nav>
             `;
 
@@ -244,6 +202,7 @@
             const date = state.selectedDate;
             state.tasks[date].push({ txt: input.value, done: false });
             save();
+            input.value = '';
         };
 
         render();
